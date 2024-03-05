@@ -19,18 +19,27 @@ enum class AuthOrRegistr
 	REGISTER,
 };
 
-enum class Main_Menu
+enum Main_Menu
 {
 	EDITING_MODE = 1,
 	PROCESSING_MODE,
+	SETTINGS,
+	EXIT,
 };
 
-enum class Menu_Branches
+enum EditingMode
 {
 	CHECKING = 1,
 	ADDING,
 	EDITING,
 	DELETING,
+	BACK,
+};
+
+
+
+enum Menu_Branches
+{
 	SORTING,
 	SEARCH,
 	INDIVIDUAL_TASK,

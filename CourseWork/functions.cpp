@@ -185,7 +185,7 @@ void registration(std::vector<Authentication>& authentication)
 //Вывод всех текущих работников.
 void printAllEmployee(std::vector<Employee>const & employee)
 {
-	std::cout << "Вот список всех текущих сотрудников: " << std::endl;
+	std::cout << "Вот список всех текущих сотрудников: \n\n";
 	for (int i = 0; i < employee.size(); i++)
 	{
 		if (employee[i].name == "")
@@ -215,6 +215,7 @@ void printAllEmployee(std::vector<Employee>const & employee)
 			std::cout << "General Director ";
 		std::cout << employee.at(i).startDate << " " << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 // добавление нового сотрудника
@@ -941,7 +942,57 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee)
 }
 
 
-void mainMenu()
+void mainMenu(std::vector<Employee> & employee)
 {
+	int choise;
+	do
+	{
+		std::cout << "-------------------------------------УЧЁТ СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ-----------------------------------------------" << std::endl;
+		std::cout << "1. Режим редактирования.\n";
+		std::cout << "2. Режим обработки.\n";
+		std::cout << "3. Настройки.\n";
+		std::cout << "4. Выход.\n\n";
 
+		std::cout << "Ваш выбор: ";
+		std::cin >> choise;
+
+		system("cls");
+		switch (choise)
+		{
+		case(EDITING_MODE): editingMode(employee);
+		default:
+			break;
+		}
+		
+	} while (choise != 4);
+}
+
+
+void editingMode(std::vector<Employee> &employee)
+{
+	int choise;
+	do
+	{
+		std::cout << "------------------------------------------РEЖИМ РЕДАКТИРОВАНИЯ--------------------------------------------------------\n";
+		std::cout << "1. Вывод всех сотрудников.\n";
+		std::cout << "2. Добавить сотрудника.\n";
+		std::cout << "3. Редактировать данные.\n";
+		std::cout << "4. Удалить сотрудника.\n";
+		std::cout << "5. Вернуться назад.\n\n";
+
+		std::cout << "Ваш выбор: ";
+		std::cin >> choise;
+
+		system("cls");
+		switch (choise)
+		{
+		case(CHECKING): printAllEmployee(employee); break;
+		case(ADDING):   addNewEmployee(employee);   break;
+		case(EDITING):  editEmployee(employee);     break;
+		case(DELETING): deleteEmployee(employee);   break;
+		case(BACK):                                 break;
+		default: break;
+		}
+
+	} while (choise != 4);
 }

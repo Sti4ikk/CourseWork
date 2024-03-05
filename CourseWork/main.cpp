@@ -28,6 +28,7 @@ int main()
 	//getExperienceOfEmployees(employee);
 	//searchForEmployeesOfRetirementAge(employee);
 
+	mainMenu(employee);
 
 	return 0;
 }

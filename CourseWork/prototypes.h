@@ -41,3 +41,7 @@ void printEmployeesOfRetirementAge(std::vector<Employee>& employee, std::vector<
 
 void getExperienceOfEmployees(std::vector<Employee> const& employee);
 int ageOfEmployee(std::vector<Employee>& employee, const int index);
+
+
+void mainMenu(std::vector<Employee>& employee);
+void editingMode(std::vector<Employee>& employee);
