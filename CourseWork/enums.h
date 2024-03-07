@@ -38,10 +38,10 @@ enum EditingMode
 
 
 
-enum Menu_Branches
+enum ProcessingMode
 {
+	SEARCH = 1,
 	SORTING,
-	SEARCH,
 	INDIVIDUAL_TASK,
 	GET_BACK,
 };

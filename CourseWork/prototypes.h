@@ -36,12 +36,17 @@ void sortWithExperienceUp(std::vector<Employee>& employee);
 void sortWithExperienceDown(std::vector<Employee>& employee);
 
 int checkGenderOfEmployee(std::vector<Employee>& employee, const int index);
-void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee);
+void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee, std::vector<int>& indexes);
 void printEmployeesOfRetirementAge(std::vector<Employee>& employee, std::vector<int> &indexes);
 
 void getExperienceOfEmployees(std::vector<Employee> const& employee);
 int ageOfEmployee(std::vector<Employee>& employee, const int index);
 
 
-void mainMenu(std::vector<Employee>& employee);
+void mainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
 void editingMode(std::vector<Employee>& employee);
+
+void chooseTypeOfSearch(std::vector<Employee>& employee);
+void chooseTypeOfSort(std::vector<Employee>& employee);
+int typeOFSorting();
+void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes);

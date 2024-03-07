@@ -2,6 +2,8 @@
 
 std::vector<Employee> employee;
 std::vector<Authentication> authentication;
+// вектор для хранения индексов сотрдуников пенсионного возраста
+std::vector<int> indexes;
 
 int main()
 {
@@ -26,9 +28,10 @@ int main()
 	//sortWithExperienceDown(employee);
 	//printAllEmployee(employee);
 	//getExperienceOfEmployees(employee);
-	//searchForEmployeesOfRetirementAge(employee);
+	//searchForEmployeesOfRetirementAge(employee, indexes);
+	//printEmployeesOfRetirementAge(employee, indexes);
 
-	mainMenu(employee);
+	mainMenu(employee, indexes);
 
 	return 0;
 }

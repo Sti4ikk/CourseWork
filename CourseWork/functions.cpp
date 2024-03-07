@@ -7,6 +7,7 @@
 #include "enums.h"
 #include <array>
 
+
 // запись данных из файла в вектор auth
 void writingToVectorsFromFileAuth(std::vector<Authentication>& authentication)
 {
@@ -430,6 +431,7 @@ void searchForSurName(std::vector<Employee>& employee)
 	std::string surName;
 	std::cout << "Введите фамилию сотрудника: ";
 	std::cin >> surName;
+	system("cls");
 
 	bool isThereAtLeastOne = false;
 	bool onlyOneTime = false;
@@ -483,12 +485,12 @@ void searchForSurName(std::vector<Employee>& employee)
 					std::cout << "General_director ";
 					break;
 				}
-				std::cout << employee.at(index).startDate << " ";
+				std::cout << employee.at(index).startDate << " " << std::endl;
 			}
 		}
 	}
 	if (!isThereAtLeastOne)
-		std::cout << "Не найдено сотрудников с такой фамилией!";
+		std::cout << "Не найдено сотрудников с такой фамилией!\n";
 }
 
 // поиск по должности
@@ -498,6 +500,7 @@ void searchForPost(std::vector<Employee>& employee)
 	int post1;
 	std::cout << "Введите должность сотрудника: ";
 	std::cin >> post;
+	system("cls");
 
 	if (post == "Junior")
 		post1 = static_cast<int>(Post::JUNIOR);
@@ -576,8 +579,9 @@ void searchForPost(std::vector<Employee>& employee)
 			}
 		}
 	}
+
 	if (!isThereAtLeastOne)
-			std::cout << "Не найдено сотрудников, имеющих данную должность!";
+		std::cout << "Не найдено сотрудников, имеющих данную должность!" << std::endl;
 }
 
 // поиск по дате начала работы
@@ -586,6 +590,7 @@ void searchForStartDate(std::vector<Employee>& employee)
 	int startDate;
 	std::cout << "Введите год начала работы сотрудника: ";
 	std::cin >> startDate;
+	system("cls");
 
 	bool isThereAtLeastOne = false;
 	bool onlyOneTime = false;
@@ -646,7 +651,28 @@ void searchForStartDate(std::vector<Employee>& employee)
 		}
 	}
 	if (!isThereAtLeastOne)
-		std::cout << "Не найдено сотрудников с данным годом начала работы!";
+		std::cout << "Не найдено сотрудников с данным годом начала работы!\n";
+}
+
+void chooseTypeOfSearch(std::vector<Employee>& employee)
+{
+	int choise;
+
+	std::cout << "1. Поиск по фамилии.\n";
+	std::cout << "2. Поиск по должности.\n";
+	std::cout << "3. Поиск по году начала работы.\n\n";
+
+	std::cout << "Выберите критерий, по которому будет осуществлён поиск: ";
+	std::cin >> choise;
+	system("cls");
+
+	switch (choise)
+	{
+	case(1): searchForSurName(employee); std::cout << std::endl; break;
+	case(2): searchForPost(employee); std::cout << std::endl; break;
+	case(3): searchForStartDate(employee); std::cout << std::endl; break;
+	default: break;
+	}
 }
 
 
@@ -745,7 +771,6 @@ void sortWithPostDown(std::vector<Employee>& employee)
 }
 
 
-
 // функция возвращает целое число типа годМесяцДень
 int getNumber(std::vector<Employee>& employee, int index)
 {
@@ -809,6 +834,42 @@ void sortWithExperienceUp(std::vector<Employee>& employee)
 }
 
 
+void chooseTypeOfSort(std::vector<Employee>& employee)
+{
+	int choise;
+
+	std::cout << "1. Сортировка по Фамилии.\n";
+	std::cout << "2. Сортировка по должности.\n";
+	std::cout << "3. Сортировка по стажу.\n\n";
+
+	std::cout << "Выберите критерий, по которому будет осуществлена сортировка: ";
+	std::cin >> choise;
+	system("cls");
+
+	switch (choise)
+	{
+	case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
+	case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
+	case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
+	case(BACK): 
+	default: break;
+	}
+}
+
+// выбор сортировки в порядке убывания или в порядке возрастания
+int typeOFSorting()
+{
+	int typeOfSort;
+	std::cout << "1.В порядке возрастания.\n";
+	std::cout << "2.В порядке убывания.\n\n";
+	std::cout << "В каком порядке вы хотите осуществить сортировку: ";
+	std::cin >> typeOfSort;
+	system("cls");
+
+	return typeOfSort;
+}
+
+
 // проверка на пол сотрудника
 int checkGenderOfEmployee(std::vector<Employee>& employee, const int index)
 {
@@ -843,12 +904,10 @@ int ageOfEmployee(std::vector<Employee>&employee, const int index)
 	return years;
 }
 
-// Поиск сотрудников с пенсионным возрастом
-void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee)
-{
 
-	// вектор для хранения индексов сотрдуников пенсионного возраста
-	std::vector<int> indexes;
+// Поиск сотрудников с пенсионным возрастом
+void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee, std::vector<int> &indexes)
+{
 	indexes.reserve(employee.size());
 
 	for (int index = 0; index < employee.size(); index++)
@@ -863,9 +922,10 @@ void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee)
 // Вывод сотрудников с пенсионным возрастом
 void printEmployeesOfRetirementAge(std::vector<Employee> & employee, std::vector<int> &indexes)
 {
+
 	if (indexes.empty())
 	{
-		std::cout << "Сотрудников с пенсионным возрастом нет.";
+		std::cout << "Сотрудников с пенсионным возрастом нет.\n\n";
 		return;
 	}
 		
@@ -909,6 +969,7 @@ void printEmployeesOfRetirementAge(std::vector<Employee> & employee, std::vector
 
 		std::cout << employee.at(indexes.at(j)).startDate << " " << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 // получаем стаж сотрудников в годах, месяцах и днях
@@ -942,7 +1003,7 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee)
 }
 
 
-void mainMenu(std::vector<Employee> & employee)
+void mainMenu(std::vector<Employee> & employee, std::vector<int>& indexes)
 {
 	int choise;
 	do
@@ -959,15 +1020,15 @@ void mainMenu(std::vector<Employee> & employee)
 		system("cls");
 		switch (choise)
 		{
-		case(EDITING_MODE): editingMode(employee);
-		default:
-			break;
+		case(EDITING_MODE): editingMode(employee); break;
+		case(PROCESSING_MODE): processsingMode(employee, indexes); break;
+		default: break;
 		}
 		
 	} while (choise != 4);
 }
 
-
+// редим редактирования
 void editingMode(std::vector<Employee> &employee)
 {
 	int choise;
@@ -990,7 +1051,35 @@ void editingMode(std::vector<Employee> &employee)
 		case(ADDING):   addNewEmployee(employee);   break;
 		case(EDITING):  editEmployee(employee);     break;
 		case(DELETING): deleteEmployee(employee);   break;
-		case(BACK):                                 break;
+		case(BACK):
+		default: break;
+		}
+
+	} while (choise != 5);
+}
+
+// режим обработки
+void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
+{
+	int choise;
+	do
+	{
+		std::cout << "---------------------------------------------РЕЖИМ ОБРАБОТКИ-----------------------------------------------------------" << std::endl;
+		std::cout << "1. Поиск.\n";
+		std::cout << "2. Сортировка.\n";
+		std::cout << "3. Поиск сотрудников пенсионного возраста.\n";
+		std::cout << "4. Назад.\n\n";
+
+		std::cout << "Ваш выбор: ";
+		std::cin >> choise;
+
+		system("cls");
+		switch (choise)
+		{
+		case(SEARCH): chooseTypeOfSearch(employee); break;
+		case(SORTING): chooseTypeOfSort(employee); break;
+		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
+		case(BACK): 
 		default: break;
 		}
 
