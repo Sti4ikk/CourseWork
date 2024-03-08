@@ -12,6 +12,10 @@ int main()
 	employee.reserve(50);
 	authentication.reserve(20);
 
+	//std::cout << "Press enter to exit.\n";
+	//std::cin.get();
+
+
 	writingToVectorsFromFileAuth(authentication);
 	writingToVectorsFromFileEmployee(employee);
 	//checkDataOfUser(authentication);
@@ -31,7 +35,7 @@ int main()
 	//searchForEmployeesOfRetirementAge(employee, indexes);
 	//printEmployeesOfRetirementAge(employee, indexes);
 
-	mainMenu(employee, indexes);
+	RusMainMenu(employee, indexes);
 
 	return 0;
 }

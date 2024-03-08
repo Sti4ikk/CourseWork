@@ -43,10 +43,28 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee);
 int ageOfEmployee(std::vector<Employee>& employee, const int index);
 
 
-void mainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
+void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
 void editingMode(std::vector<Employee>& employee);
 
 void chooseTypeOfSearch(std::vector<Employee>& employee);
 void chooseTypeOfSort(std::vector<Employee>& employee);
 int typeOFSorting();
 void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
+void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
+void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes);
+
+// англ функции МЕНЮ
+void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
+void EngChooseTypeOfSort(std::vector<Employee>& employee);
+int EngTypeOFSorting();
+void EngChooseTypeOfSearch(std::vector<Employee>& employee);
+void EngEditingMode(std::vector<Employee>& employee);
+void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
+void EngChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
+
+// англ функции 
+void engAddNewEmployee(std::vector<Employee>& employee);
+void engDeleteEmployee(std::vector<Employee>& employee);
+int engAreYouSure();
+void engEditEmployee(std::vector<Employee>& employee);
+

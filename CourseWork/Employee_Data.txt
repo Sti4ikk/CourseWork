@@ -1,13 +1,12 @@
-Korneichik Matvei Sergeevich Man 10.07.2006 Management General_director 02.03.2024 
+Korneichik Matvey Sergeevich Man 10.07.2006 Management General_director 02.03.2024
 Kutsko Vladislaw Vitalievich Man 30.03.2006 Game_design Director_of_department 10.10.2023
 Nelipovich Evgeniy Grigorievich Man 13.04.2005 Game_design Middle 06.02.2020
 Romanko Stanislaw Yurievich Man 09.09.2005 Gameplay Senior 25.01.2018
 Rosova Svetlana Stanislavovna Woman 28.11.2000 Audio Middle 12.10.2020
 Gvozdovskiy Evgeniy Dmitrievich Man 21.05.2006 Game_testing Junior 14.12.2023
-Smirnov Andrei Anatolievich Man 16.02.1960 Audio Team_leader 12.01.2020
 Petruchenko Alexandr Andreevich Man 07.01.2006 Game_engine_development Junior 10.11.2021
 Ivanov Vladimir Ivanovich Man 14.09.1981 Game_design Director_of_department 02.05.2010
-Revin Andrei Dmitrievich Man 17.02.1959 Management Deputy_general_director 19.06.1999
+Revin Andrei Dmitrievich Man 17.02.1959 Management Director_of_department 19.06.1999
 Gromov Georgiy Nitikovich Man 21.08.1997 Graphics_and_animation Middle 29.03.2019
 Mironova Anastasia Artemovna Woman 12.12.1963 Game_testing Senior 02.04.2016
 Ponomarenko Dmitriy Olegovich Man 16.01.1995 Game_design Project_manager 17.06.2017

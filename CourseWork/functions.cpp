@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "prototypes.h"
 #include "enums.h"
-#include <array>
+#include <Windows.h>
 
 
 // запись данных из файла в вектор auth
@@ -186,7 +186,6 @@ void registration(std::vector<Authentication>& authentication)
 //Вывод всех текущих работников.
 void printAllEmployee(std::vector<Employee>const & employee)
 {
-	std::cout << "Вот список всех текущих сотрудников: \n\n";
 	for (int i = 0; i < employee.size(); i++)
 	{
 		if (employee[i].name == "")
@@ -321,7 +320,10 @@ void deleteEmployee(std::vector<Employee>& employee)
 	if (areYouSure())
 	{
 		employee.erase(employee.begin() + number - 1);
+		system("cls");
 		std::cout << "Удаление прошло успешно!";
+		Sleep(1700);
+		system("cls");
 	}
 
 	writeInToFileAfterDeleteEmployee(employee);
@@ -334,7 +336,7 @@ int areYouSure()
 	std::cout << "Вы уверены? ";
 	std::cin >> answer;
 
-	if (answer == "Да" or answer == "Yes")
+	if (answer == "Да" or answer == "Yes" or answer == "да" or answer == "yes")
 		return 1;
 	else
 		return 0;
@@ -654,27 +656,6 @@ void searchForStartDate(std::vector<Employee>& employee)
 		std::cout << "Не найдено сотрудников с данным годом начала работы!\n";
 }
 
-void chooseTypeOfSearch(std::vector<Employee>& employee)
-{
-	int choise;
-
-	std::cout << "1. Поиск по фамилии.\n";
-	std::cout << "2. Поиск по должности.\n";
-	std::cout << "3. Поиск по году начала работы.\n\n";
-
-	std::cout << "Выберите критерий, по которому будет осуществлён поиск: ";
-	std::cin >> choise;
-	system("cls");
-
-	switch (choise)
-	{
-	case(1): searchForSurName(employee); std::cout << std::endl; break;
-	case(2): searchForPost(employee); std::cout << std::endl; break;
-	case(3): searchForStartDate(employee); std::cout << std::endl; break;
-	default: break;
-	}
-}
-
 
 
 // сортировка по Фамилии в порядке убывания(пузырьком)
@@ -834,42 +815,6 @@ void sortWithExperienceUp(std::vector<Employee>& employee)
 }
 
 
-void chooseTypeOfSort(std::vector<Employee>& employee)
-{
-	int choise;
-
-	std::cout << "1. Сортировка по Фамилии.\n";
-	std::cout << "2. Сортировка по должности.\n";
-	std::cout << "3. Сортировка по стажу.\n\n";
-
-	std::cout << "Выберите критерий, по которому будет осуществлена сортировка: ";
-	std::cin >> choise;
-	system("cls");
-
-	switch (choise)
-	{
-	case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
-	case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
-	case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
-	case(BACK): 
-	default: break;
-	}
-}
-
-// выбор сортировки в порядке убывания или в порядке возрастания
-int typeOFSorting()
-{
-	int typeOfSort;
-	std::cout << "1.В порядке возрастания.\n";
-	std::cout << "2.В порядке убывания.\n\n";
-	std::cout << "В каком порядке вы хотите осуществить сортировку: ";
-	std::cin >> typeOfSort;
-	system("cls");
-
-	return typeOfSort;
-}
-
-
 // проверка на пол сотрудника
 int checkGenderOfEmployee(std::vector<Employee>& employee, const int index)
 {
@@ -1003,85 +948,152 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee)
 }
 
 
-void mainMenu(std::vector<Employee> & employee, std::vector<int>& indexes)
+
+// англ функции
+
+void engAddNewEmployee(std::vector<Employee>& employee)
 {
-	int choise;
-	do
-	{
-		std::cout << "-------------------------------------УЧЁТ СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ-----------------------------------------------" << std::endl;
-		std::cout << "1. Режим редактирования.\n";
-		std::cout << "2. Режим обработки.\n";
-		std::cout << "3. Настройки.\n";
-		std::cout << "4. Выход.\n\n";
+	std::string surName;
+	std::string name;
+	std::string patronymic;
+	std::string gender;
+	std::string dateOfBirthday;
+	std::string departmentName;
+	std::string post;
+	std::string startDate;
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
+	std::cout << "Enter employee's surname: ";
+	std::cin >> surName;
+	std::cout << "Enter employee Name: ";
+	std::cin >> name;
+	std::cout << "Enter the employee's middle name: ";
+	std::cin >> patronymic;
+	std::cout << "Enter employee gender: ";
+	std::cin >> gender;
+	std::cout << "Enter the employee's date of birth: ";
+	std::cin >> dateOfBirthday;
+	std::cout << "Enter the employee's department name: ";
+	std::cin >> departmentName;
+	std::cout << "Enter the employee's position: ";
+	std::cin >> post;
+	std::cout << "Enter the employee's start date: ";
+	std::cin >> startDate;
 
-		system("cls");
-		switch (choise)
-		{
-		case(EDITING_MODE): editingMode(employee); break;
-		case(PROCESSING_MODE): processsingMode(employee, indexes); break;
-		default: break;
-		}
-		
-	} while (choise != 4);
+	writeInfoOfNewEmployeeInFile(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
 }
 
-// редим редактирования
-void editingMode(std::vector<Employee> &employee)
+// удаление данных о сотруднике из вектора
+void engDeleteEmployee(std::vector<Employee>& employee)
 {
-	int choise;
-	do
+	std::cout << "List of current employees: \n\n";
+	printAllEmployee(employee);
+
+	int number;
+	std::cout << "Enter the employee number from the list to be deleted: ";
+	std::cin >> number;
+
+	if (engAreYouSure())
 	{
-		std::cout << "------------------------------------------РEЖИМ РЕДАКТИРОВАНИЯ--------------------------------------------------------\n";
-		std::cout << "1. Вывод всех сотрудников.\n";
-		std::cout << "2. Добавить сотрудника.\n";
-		std::cout << "3. Редактировать данные.\n";
-		std::cout << "4. Удалить сотрудника.\n";
-		std::cout << "5. Вернуться назад.\n\n";
-
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
+		employee.erase(employee.begin() + number - 1);
 		system("cls");
-		switch (choise)
-		{
-		case(CHECKING): printAllEmployee(employee); break;
-		case(ADDING):   addNewEmployee(employee);   break;
-		case(EDITING):  editEmployee(employee);     break;
-		case(DELETING): deleteEmployee(employee);   break;
-		case(BACK):
-		default: break;
-		}
+		std::cout << "Removal was successful!";
+		Sleep(1700);
+		system("cls");
+	}
 
-	} while (choise != 5);
+	writeInToFileAfterDeleteEmployee(employee);
 }
 
-// режим обработки
-void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
+int engAreYouSure()
 {
-	int choise;
-	do
-	{
-		std::cout << "---------------------------------------------РЕЖИМ ОБРАБОТКИ-----------------------------------------------------------" << std::endl;
-		std::cout << "1. Поиск.\n";
-		std::cout << "2. Сортировка.\n";
-		std::cout << "3. Поиск сотрудников пенсионного возраста.\n";
-		std::cout << "4. Назад.\n\n";
+	std::string answer;
+	std::cout << "Are you sure? ";
+	std::cin >> answer;
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
-		system("cls");
-		switch (choise)
-		{
-		case(SEARCH): chooseTypeOfSearch(employee); break;
-		case(SORTING): chooseTypeOfSort(employee); break;
-		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
-		case(BACK): 
-		default: break;
-		}
-
-	} while (choise != 4);
+	if (answer == "Да" or answer == "Yes" or answer == "yes" or answer == "да")
+		return 1;
+	else
+		return 0;
 }
+
+void engEditEmployee(std::vector<Employee>& employee)
+{
+	printAllEmployee(employee);
+
+	int number;
+	std::cout << "Enter the number of the employee whose details you want to edit: ";
+	std::cin >> number;
+
+	std::cout << "Choose what you want to edit: " << std::endl;
+	std::cout << "1. Surname" << std::endl;
+	std::cout << "2. Name" << std::endl;
+	std::cout << "3. Patronymic" << std::endl;
+	std::cout << "4. Gender" << std::endl;
+	std::cout << "5. Date of birthday" << std::endl;
+	std::cout << "6. Name of department" << std::endl;
+	std::cout << "7. Post" << std::endl;
+	std::cout << "8. Start date" << std::endl;
+
+	int answer;
+	std::cin >> answer;
+
+	std::string newInfo;
+	std::cout << "Please enter correct information: ";
+	std::cin >> newInfo;
+
+	switch (answer)
+	{
+	case(1): employee.at(number - 1).surName = newInfo; break;
+	case(2): employee.at(number - 1).name = newInfo; break;
+	case(3): employee.at(number - 1).patronymic = newInfo; break;
+	case(4): employee.at(number - 1).gender = newInfo; break;
+	case(5): employee.at(number - 1).dateOfBirthday = newInfo; break;
+	case(6): employee.at(number - 1).departmentName = newInfo; break;
+	case(7):
+		if (newInfo == "Junior")
+		{
+			employee.at(number - 1).post = Post::JUNIOR;
+			break;
+		}
+		else if (newInfo == "Middle")
+		{
+			employee.at(number - 1).post = Post::MIDDLE;
+			break;
+		}
+		else if (newInfo == "Senior")
+		{
+			employee.at(number - 1).post = Post::SENIOR;
+			break;
+		}
+		else if (newInfo == "Team_leader")
+		{
+			employee.at(number - 1).post = Post::TEAM_LEADER;
+			break;
+		}
+		else if (newInfo == "Project_manager")
+		{
+			employee.at(number - 1).post = Post::PROJECT_MANAGER;
+			break;
+		}
+		else if (newInfo == "Director_of_department")
+		{
+			employee.at(number - 1).post = Post::DIRECTOR_OF_DEPARTMENT;
+			break;
+		}
+		else if (newInfo == "Deputy_general_director")
+		{
+			employee.at(number - 1).post = Post::DEPUTY_GENERAL_DIRECTOR;
+			break;
+		}
+		else if (newInfo == "General_director")
+		{
+			employee.at(number - 1).post = Post::GENERAL_DIRECTOR;
+			break;
+		}
+	case(8): employee.at(number - 1).startDate = newInfo; break;
+	default: std::cout << "Enter a number from the list!";
+	}
+
+	writeInToFileAfterDeleteEmployee(employee);
+}
+
