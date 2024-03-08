@@ -33,9 +33,8 @@ enum EditingMode
 	ADDING,
 	EDITING,
 	DELETING,
-	BACK,
+	E_BACK,
 };
-
 
 
 enum ProcessingMode
@@ -43,5 +42,12 @@ enum ProcessingMode
 	SEARCH = 1,
 	SORTING,
 	INDIVIDUAL_TASK,
-	GET_BACK,
+	P_BACK,
+};
+
+
+enum Settings
+{
+	LANGUAGE = 1,
+	S_BACK,
 };

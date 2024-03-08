@@ -184,7 +184,7 @@ void registration(std::vector<Authentication>& authentication)
 }
 
 //Вывод всех текущих работников.
-void printAllEmployee(std::vector<Employee>const & employee)
+void printAllEmployee(std::vector<Employee> & employee)
 {
 	for (int i = 0; i < employee.size(); i++)
 	{
@@ -248,6 +248,45 @@ void addNewEmployee(std::vector<Employee>& employee)
 	std::cin >> startDate;
 
 	writeInfoOfNewEmployeeInFile(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
+	writeEmployeeIntoVector(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
+
+	system("cls");
+	std::cout << "Добавление прошло успешно!";
+	Sleep(1700);
+	system("cls");
+}
+
+// добавление сотрудника в вектор после добавления нового сотрудника
+void writeEmployeeIntoVector(std::vector<Employee>& employee, std::string surName, std::string name, std::string patronymic, std::string gender, std::string dateOfBirthday, std::string departmenrName, std::string post, std::string startDate)
+{
+	Employee emp;
+	emp.surName = surName;
+	emp.name = name;
+	emp.patronymic = patronymic;
+	emp.gender = gender;
+	emp.dateOfBirthday = dateOfBirthday;
+	emp.departmentName = departmenrName;
+
+	if (post == "Junior")
+		emp.post = Post::JUNIOR;
+	else if (post == "Middle")
+		emp.post = Post::MIDDLE;
+	else if (post == "Senior")
+		emp.post = Post::SENIOR;
+	else if (post == "Team_leader")
+		emp.post = Post::TEAM_LEADER;
+	else if (post == "Project_manager")
+		emp.post = Post::PROJECT_MANAGER;
+	else if (post == "Director_of_department")
+		emp.post = Post::DIRECTOR_OF_DEPARTMENT;
+	else if (post == "Deputy_general_director")
+		emp.post = Post::DEPUTY_GENERAL_DIRECTOR;
+	else if (post == "General_director")
+		emp.post = Post::GENERAL_DIRECTOR;
+
+	emp.startDate = startDate;
+
+	employee.push_back(emp);
 }
 
 // запись в файл нового сотрудника
@@ -262,10 +301,7 @@ void writeInfoOfNewEmployeeInFile(std::vector<Employee>& employee, std::string s
 	empl << dateOfBirthday << " ";
 	empl << departmenrName << " ";
 	empl << post << " ";
-	empl << startDate << " ";
-
-	// запись сотрудника в вектор
-	writingToVectorsFromFileEmployee(employee);
+	empl << startDate;
 
 	empl.close();
 }
@@ -316,13 +352,21 @@ void deleteEmployee(std::vector<Employee>& employee)
 	int number;
 	std::cout << "Введите номер сотрудника из списка для удаления: ";
 	std::cin >> number;
+	system("cls");
 
 	if (areYouSure())
 	{
 		employee.erase(employee.begin() + number - 1);
 		system("cls");
 		std::cout << "Удаление прошло успешно!";
-		Sleep(1700);
+		Sleep(1900);
+		system("cls");
+	}
+	else
+	{
+		system("cls");
+		std::cout << "Удаление не было выполнено!";
+		Sleep(2000);
 		system("cls");
 	}
 
@@ -351,7 +395,7 @@ void editEmployee(std::vector<Employee>& employee)
 	std::cout << "Введите номер сотрудника, данные которого хотите отредактировать: ";
 	std::cin >> number;
 
-	std::cout << "Выберите, что именно хотите отредактировать: " << std::endl;
+	
 	std::cout << "1. Фамилия" << std::endl;
 	std::cout << "2. Имя" << std::endl;
 	std::cout << "3. Отчество" << std::endl;
@@ -359,10 +403,13 @@ void editEmployee(std::vector<Employee>& employee)
 	std::cout << "5. Дата рождения" << std::endl;
 	std::cout << "6. Название отдела" << std::endl;
 	std::cout << "7. Должность" << std::endl;
-	std::cout << "8. Дата начала работы" << std::endl;
+	std::cout << "8. Дата начала работы\n" << std::endl;
+
+	std::cout << "Выберите, что именно хотите отредактировать: ";
 
 	int answer;
 	std::cin >> answer;
+	std::cout << std::endl;
 
 	std::string newInfo;
 	std::cout << "Введите корректную информацию: ";
@@ -423,6 +470,10 @@ void editEmployee(std::vector<Employee>& employee)
 
 
 	writeInToFileAfterDeleteEmployee(employee);
+	system("cls");
+	std::cout << "Редактирование данных прошло успешно!";
+	Sleep(2000);
+	system("cls");
 }
 
 
@@ -980,6 +1031,12 @@ void engAddNewEmployee(std::vector<Employee>& employee)
 	std::cin >> startDate;
 
 	writeInfoOfNewEmployeeInFile(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
+	writeEmployeeIntoVector(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
+
+	system("cls");
+	std::cout << "Addition was successful!";
+	Sleep(1700);
+	system("cls");
 }
 
 // удаление данных о сотруднике из вектора
@@ -997,7 +1054,14 @@ void engDeleteEmployee(std::vector<Employee>& employee)
 		employee.erase(employee.begin() + number - 1);
 		system("cls");
 		std::cout << "Removal was successful!";
-		Sleep(1700);
+		Sleep(2000);
+		system("cls");
+	}
+	else
+	{
+		system("cls");
+		std::cout << "Удаление не было выполнено!";
+		Sleep(2000);
 		system("cls");
 	}
 
@@ -1021,7 +1085,6 @@ void engEditEmployee(std::vector<Employee>& employee)
 	printAllEmployee(employee);
 
 	int number;
-	std::cout << "Enter the number of the employee whose details you want to edit: ";
 	std::cin >> number;
 
 	std::cout << "Choose what you want to edit: " << std::endl;
@@ -1032,10 +1095,13 @@ void engEditEmployee(std::vector<Employee>& employee)
 	std::cout << "5. Date of birthday" << std::endl;
 	std::cout << "6. Name of department" << std::endl;
 	std::cout << "7. Post" << std::endl;
-	std::cout << "8. Start date" << std::endl;
+	std::cout << "8. Start date\n" << std::endl;
+
+	std::cout << "Enter the number of the employee whose details you want to edit: ";
 
 	int answer;
 	std::cin >> answer;
+	std::cout << std::endl;
 
 	std::string newInfo;
 	std::cout << "Please enter correct information: ";
@@ -1095,5 +1161,9 @@ void engEditEmployee(std::vector<Employee>& employee)
 	}
 
 	writeInToFileAfterDeleteEmployee(employee);
-}
 
+	system("cls");
+	std::cout << "Редактирование данных прошло успешно!";
+	Sleep(2000);
+	system("cls");
+}

@@ -9,12 +9,13 @@ int checkDataOfUser(std::vector<Authentication>& authentication);
 int isLoginAvailable(std::string login, std::vector<Authentication>& authentication);
 int isPasswordGood(std::string password);
 void registration(std::vector<Authentication>& authentication);
-void printAllEmployee(std::vector<Employee>const& employee);
+void printAllEmployee(std::vector<Employee>& employee);
 void addNewEmployee(std::vector<Employee>& employee);
 void writeInfoOfNewEmployeeInFile(std::vector<Employee>& employee, std::string surName, std::string name, std::string patronymic, std::string gender, std::string dateOfBirthday, std::string departmenrName, std::string post, std::string startDate);
 void deleteEmployee(std::vector<Employee>& employee);
 int areYouSure();
 void editEmployee(std::vector<Employee>& employee);
+void writeEmployeeIntoVector(std::vector<Employee>& employee, std::string surName, std::string name, std::string patronymic, std::string gender, std::string dateOfBirthday, std::string departmenrName, std::string post, std::string startDate);
 
 // поиск
 void searchForSurName(std::vector<Employee>& employee);
@@ -52,6 +53,9 @@ int typeOFSorting();
 void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
 void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
 void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes);
+void writeInToFileAfterDeleteEmployee(std::vector<Employee>& employee);
+
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes);
 
 // англ функции МЕНЮ
 void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
@@ -60,11 +64,11 @@ int EngTypeOFSorting();
 void EngChooseTypeOfSearch(std::vector<Employee>& employee);
 void EngEditingMode(std::vector<Employee>& employee);
 void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
-void EngChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
 
 // англ функции 
 void engAddNewEmployee(std::vector<Employee>& employee);
 void engDeleteEmployee(std::vector<Employee>& employee);
 int engAreYouSure();
 void engEditEmployee(std::vector<Employee>& employee);
-
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes);

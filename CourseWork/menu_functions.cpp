@@ -29,7 +29,7 @@ void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
 		{
 		case(EDITING_MODE): editingMode(employee); break;
 		case(PROCESSING_MODE): processsingMode(employee, indexes); break;
-		case(SETTINGS): rusChooseMenuLanguage(employee, indexes); break;
+		case(SETTINGS): rusSettings(employee, indexes); break;
 		default: break;
 		}
 
@@ -53,7 +53,7 @@ void chooseTypeOfSort(std::vector<Employee>& employee)
 	case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
 	case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
 	case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
-	case(BACK):
+	case(4):      // доделать
 	default: break;
 	}
 }
@@ -112,7 +112,7 @@ void editingMode(std::vector<Employee>& employee)
 		case(ADDING):   addNewEmployee(employee);   break;
 		case(EDITING):  editEmployee(employee);     break;
 		case(DELETING): deleteEmployee(employee);   break;
-		case(BACK):
+		case(E_BACK):
 		default: break;
 		}
 
@@ -139,19 +139,46 @@ void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 		case(SEARCH): chooseTypeOfSearch(employee); break;
 		case(SORTING): chooseTypeOfSort(employee); break;
 		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
-		case(BACK):
+		case(P_BACK):
 		default: break;
 		}
 
 	} while (choise != 4);
 }
 
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
+{
+
+	int choise;
+
+	do
+	{
+		std::cout << "----------------------------------------------НАСТРОЙКИ---------------------------------------------------------------\n";
+		std::cout << "1. Язык.\n";
+		std::cout << "2. Назад.\n";
+
+		std::cout << "Ваш выбор: ";
+		std::cin >> choise;
+
+		system("cls");
+		switch (choise)
+		{
+		case(LANGUAGE): rusChooseMenuLanguage(employee, indexes); break;
+		case(S_BACK):
+		default: break;
+		}
+
+	} while (choise != 2);
+}
+
 // возврыщает 1 - русский язык, 2 - английский язык
 void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes)
 {
 	int choise;
+	std::cout << "----------------------------------------------НАСТРОЙКИ ЯЗЫКА---------------------------------------------------------\n";
 	std::cout << "1. Русский.\n";
 	std::cout << "2. English.\n";
+
 	std::cout << "Выберите язык: ";
 	std::cin >> choise;
 	system("cls");
@@ -199,7 +226,7 @@ void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
 		{
 		case(EDITING_MODE): EngEditingMode(employee); break;
 		case(PROCESSING_MODE): EngProcesssingMode(employee, indexes); break;
-		case(SETTINGS): EngChooseMenuLanguage(employee, indexes); break;
+		case(SETTINGS): engSettings(employee, indexes); break;
 		default: break;
 		}
 
@@ -223,7 +250,7 @@ void EngChooseTypeOfSort(std::vector<Employee>& employee)
 	case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
 	case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
 	case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
-	case(BACK):
+	case(4):
 	default: break;
 	}
 }
@@ -282,7 +309,7 @@ void EngEditingMode(std::vector<Employee>& employee)
 		case(ADDING):   engAddNewEmployee(employee);   break;
 		case(EDITING):  engEditEmployee(employee);     break;
 		case(DELETING): engDeleteEmployee(employee);   break;
-		case(BACK):
+		case(E_BACK):
 		default: break;
 		}
 
@@ -309,14 +336,14 @@ void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& index
 		case(SEARCH): chooseTypeOfSearch(employee); break;
 		case(SORTING): chooseTypeOfSort(employee); break;
 		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
-		case(BACK):
+		case(P_BACK):
 		default: break;
 		}
 
 	} while (choise != 4);
 }
 
-void EngChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes)
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes)
 {
 	int choise;
 	std::cout << "1. Russian.\n";
@@ -337,4 +364,29 @@ void EngChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& in
 	system("cls");
 
 	turnMenuLanguge(choise, employee, indexes);
+}
+
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
+{
+
+	int choise;
+
+	do
+	{
+		std::cout << "----------------------------------------------SETTINGS---------------------------------------------------------------\n";
+		std::cout << "1. Language.\n";
+		std::cout << "2. Back.\n";
+
+		std::cout << "Your choise: ";
+		std::cin >> choise;
+
+		system("cls");
+		switch (choise)
+		{
+		case(LANGUAGE): engChooseMenuLanguage(employee, indexes); break;
+		case(S_BACK):
+		default: break;
+		}
+
+	} while (choise != 2);
 }
