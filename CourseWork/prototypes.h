@@ -2,10 +2,13 @@
 #include "structs.h"
 #include <vector>
 
+void secondsSinceLastExecution();
+void auth(std::vector<Authentication>& authentication, int& tries);
+long checkHowManyTimeGo();
 
 void writingToVectorsFromFileAuth(std::vector<Authentication>& authentication);
 void writingToVectorsFromFileEmployee(std::vector<Employee>& employee);
-int checkDataOfUser(std::vector<Authentication>& authentication);
+int checkDataOfUser(std::vector<Authentication>& authentication, int& tries);
 int isLoginAvailable(std::string login, std::vector<Authentication>& authentication);
 int isPasswordGood(std::string password);
 void registration(std::vector<Authentication>& authentication);
@@ -44,31 +47,31 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee);
 int ageOfEmployee(std::vector<Employee>& employee, const int index);
 
 
-void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
+void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
 void editingMode(std::vector<Employee>& employee);
 
 void chooseTypeOfSearch(std::vector<Employee>& employee);
 void chooseTypeOfSort(std::vector<Employee>& employee);
 int typeOFSorting();
 void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
-void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
-void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes);
+void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
 void writeInToFileAfterDeleteEmployee(std::vector<Employee>& employee);
 
-void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes);
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
 
 // англ функции МЕНЮ
-void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes);
+void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
 void EngChooseTypeOfSort(std::vector<Employee>& employee);
 int EngTypeOFSorting();
 void EngChooseTypeOfSearch(std::vector<Employee>& employee);
 void EngEditingMode(std::vector<Employee>& employee);
 void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
-void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes);
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
 
 // англ функции 
 void engAddNewEmployee(std::vector<Employee>& employee);
 void engDeleteEmployee(std::vector<Employee>& employee);
 int engAreYouSure();
 void engEditEmployee(std::vector<Employee>& employee);
-void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes);
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);

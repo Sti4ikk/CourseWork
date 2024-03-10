@@ -6,11 +6,69 @@
 #include "prototypes.h"
 #include "enums.h"
 #include <Windows.h>
+#include <chrono>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
+
+//АВТОРИЗАЦИЯ
+void auth(std::vector<Authentication> &authentication, int &tries)
+{
+	std::cout << "----------------------ПРОГРАММА УЧЁТА СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ------------------------\n";
+	std::cout << "1. Вход.\n"
+			  << "2. Регистрация.\n\n"
+			  << "Ваш выбор: ";
+	int choise;
+	std::cin >> choise;
+	switch (choise)
+	{
+	case(AUTH):     checkDataOfUser(authentication, tries); break;
+	case(REGISTER): registration(authentication);    break;
+	default: break;
+	}
+}
+
+
+long checkHowManyTimeGo()
+{
+	// Открываем файл для чтения
+	std::fstream file("Time.txt");
+
+	// Проверяем, удалось ли открыть файл
+	if (!file.is_open()) {
+		std::cerr << "Error: Unable to open last_execution.txt" << std::endl;
+		return -1; // Возвращаем -1 в случае ошибки
+	}
+
+	// Считываем время последнего запуска из файла
+	std::string lastExecutionTimeString;
+	std::getline(file, lastExecutionTimeString);
+
+
+	// Преобразуем строку с временем в объект времени
+	std::istringstream iss(lastExecutionTimeString);
+	std::tm lastExecutionTime = {};
+	iss >> std::get_time(&lastExecutionTime, "%Y-%m-%d %H:%M:%S");
+
+	// Получаем текущее время
+	std::chrono::system_clock::time_point currentTime = std::chrono::system_clock::now();
+
+	// Преобразуем время последнего запуска в системное время
+	std::time_t lastExecutionTime_t = std::mktime(&lastExecutionTime);
+	std::chrono::system_clock::time_point lastExecution = std::chrono::system_clock::from_time_t(lastExecutionTime_t);
+
+	// Рассчитываем разницу во времени
+	std::chrono::duration<int> timeSinceLastExecution = std::chrono::duration_cast<std::chrono::seconds>(currentTime - lastExecution);
+
+	file.close();
+	// Возвращаем количество секунд, прошедших с последнего запуска
+	return timeSinceLastExecution.count();
+}
 
 
 // РУССКОЕ МЕНЮ
-void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
+void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	int choise;
 	do
@@ -29,7 +87,7 @@ void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
 		{
 		case(EDITING_MODE): editingMode(employee); break;
 		case(PROCESSING_MODE): processsingMode(employee, indexes); break;
-		case(SETTINGS): rusSettings(employee, indexes); break;
+		case(SETTINGS): rusSettings(employee, indexes, authentication); break;
 		default: break;
 		}
 
@@ -146,7 +204,7 @@ void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 	} while (choise != 4);
 }
 
-void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 
 	int choise;
@@ -163,7 +221,7 @@ void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
 		system("cls");
 		switch (choise)
 		{
-		case(LANGUAGE): rusChooseMenuLanguage(employee, indexes); break;
+		case(LANGUAGE): rusChooseMenuLanguage(employee, indexes, authentication); break;
 		case(S_BACK):
 		default: break;
 		}
@@ -172,7 +230,7 @@ void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
 }
 
 // возврыщает 1 - русский язык, 2 - английский язык
-void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes)
+void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	int choise;
 	std::cout << "----------------------------------------------НАСТРОЙКИ ЯЗЫКА---------------------------------------------------------\n";
@@ -194,20 +252,20 @@ void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& in
 	Sleep(2500);
 	system("cls");
 
-	turnMenuLanguge(choise, employee, indexes);
+	turnMenuLanguge(choise, employee, indexes, authentication);
 }
 
-void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes)
+void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	if (choise == 1)
-		RusMainMenu(employee, indexes);
+		RusMainMenu(employee, indexes, authentication);
 	else if (choise == 2)
-		EngMainMenu(employee, indexes);
+		EngMainMenu(employee, indexes, authentication);
 }
 
 
 //АНГЛИЙСКОЕ МЕНЮ
-void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
+void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	int choise;
 	do
@@ -226,7 +284,7 @@ void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes)
 		{
 		case(EDITING_MODE): EngEditingMode(employee); break;
 		case(PROCESSING_MODE): EngProcesssingMode(employee, indexes); break;
-		case(SETTINGS): engSettings(employee, indexes); break;
+		case(SETTINGS): engSettings(employee, indexes, authentication); break;
 		default: break;
 		}
 
@@ -343,7 +401,7 @@ void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& index
 	} while (choise != 4);
 }
 
-void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes)
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	int choise;
 	std::cout << "1. Russian.\n";
@@ -363,10 +421,10 @@ void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& in
 	Sleep(2500);
 	system("cls");
 
-	turnMenuLanguge(choise, employee, indexes);
+	turnMenuLanguge(choise, employee, indexes, authentication);
 }
 
-void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 
 	int choise;
@@ -383,7 +441,7 @@ void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes)
 		system("cls");
 		switch (choise)
 		{
-		case(LANGUAGE): engChooseMenuLanguage(employee, indexes); break;
+		case(LANGUAGE): engChooseMenuLanguage(employee, indexes, authentication); break;
 		case(S_BACK):
 		default: break;
 		}

@@ -142,6 +142,7 @@
   <ItemGroup>
     <Text Include="Authentication_Data.txt" />
     <Text Include="Employee_Data.txt" />
+    <Text Include="Time.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

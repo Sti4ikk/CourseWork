@@ -6,6 +6,31 @@
 #include "prototypes.h"
 #include "enums.h"
 #include <Windows.h>
+#include <chrono>
+
+void secondsSinceLastExecution()
+{
+	int secondsSinceLastExecution = checkHowManyTimeGo();
+	if (secondsSinceLastExecution != -1) {
+		std::cout << "Time since last execution: " << secondsSinceLastExecution << " seconds" << std::endl;
+	}
+
+	// Сохраняем текущее время в файл для будущих запусков
+	std::ofstream file("Time.txt");
+	if (file.fail()) {
+		std::cerr << "Error: Unable to open last_execution.txt for writing" << std::endl;
+	}
+	else {
+		auto now = std::chrono::system_clock::now();
+		std::time_t now_t = std::chrono::system_clock::to_time_t(now);
+		struct tm timeinfo;
+		localtime_s(&timeinfo, &now_t);
+		char time_buffer[20];
+		std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+		file << time_buffer;
+		file.close(); // Закрываем файл после записи данных
+	}
+}
 
 
 // запись данных из файла в вектор auth
@@ -71,7 +96,7 @@ void writingToVectorsFromFileEmployee(std::vector<Employee>&employee)
 }
 
 // проверка правильности ввода данных(вход в систему)            
-int checkDataOfUser(std::vector<Authentication>& authentication)
+int checkDataOfUser(std::vector<Authentication>& authentication, int &tries)
 {
 	std::string login;
 	std::string password;
@@ -95,6 +120,9 @@ int checkDataOfUser(std::vector<Authentication>& authentication)
 		}
 		if (!check)
 		{
+			tries++;
+			if (tries > 4)
+				return -100;
 			std::cout << "Данные неверные. Попробуйте ещё раз..." << std::endl;
 		}
 	}
@@ -191,7 +219,7 @@ void printAllEmployee(std::vector<Employee> & employee)
 		if (employee[i].name == "")
 			break;
 
-		std::cout << employee.at(i).surName << " ";
+		std::cout <<i+1<<((i<9)? ".  ":". " )<< employee.at(i).surName << " ";
 		std::cout << employee.at(i).name << " ";
 		std::cout << employee.at(i).patronymic << " ";
 		std::cout << employee.at(i).gender << " ";
@@ -377,10 +405,10 @@ void deleteEmployee(std::vector<Employee>& employee)
 int areYouSure()
 {
 	std::string answer;
-	std::cout << "Вы уверены? ";
+	std::cout << "Вы уверены?: ";
 	std::cin >> answer;
 
-	if (answer == "Да" or answer == "Yes" or answer == "да" or answer == "yes")
+	if (answer == "Да" or answer == "Yes" or answer == "да" or answer == "yes" or answer == "y" or answer == "Y")
 		return 1;
 	else
 		return 0;
@@ -756,6 +784,7 @@ void sortWithSurNameUp(std::vector<Employee>& employee)
 
 
 
+
 // поиск наименьшего элемента для сортировки выбором
 int findSmallestPosition(std::vector<Employee> &employee, int startPosition)
 {
@@ -1071,7 +1100,7 @@ void engDeleteEmployee(std::vector<Employee>& employee)
 int engAreYouSure()
 {
 	std::string answer;
-	std::cout << "Are you sure? ";
+	std::cout << "Are you sure?: ";
 	std::cin >> answer;
 
 	if (answer == "Да" or answer == "Yes" or answer == "yes" or answer == "да")

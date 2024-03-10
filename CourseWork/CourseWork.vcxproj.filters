@@ -46,5 +46,8 @@
     <Text Include="Employee_Data.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="Time.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
   </ItemGroup>
 </Project>

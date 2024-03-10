@@ -13,7 +13,7 @@ enum class Post
 	GENERAL_DIRECTOR,
 };
 
-enum class AuthOrRegistr
+enum AuthOrRegistr
 {
 	AUTH = 1,
 	REGISTER,
