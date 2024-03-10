@@ -7,96 +7,12 @@
 #include "enums.h"
 #include <Windows.h>
 #include <chrono>
-
-void secondsSinceLastExecution()
-{
-	int secondsSinceLastExecution = checkHowManyTimeGo();
-	if (secondsSinceLastExecution != -1) {
-		std::cout << "Time since last execution: " << secondsSinceLastExecution << " seconds" << std::endl;
-	}
-
-	// Сохраняем текущее время в файл для будущих запусков
-	std::ofstream file("Time.txt");
-	if (file.fail()) {
-		std::cerr << "Error: Unable to open last_execution.txt for writing" << std::endl;
-	}
-	else {
-		auto now = std::chrono::system_clock::now();
-		std::time_t now_t = std::chrono::system_clock::to_time_t(now);
-		struct tm timeinfo;
-		localtime_s(&timeinfo, &now_t);
-		char time_buffer[20];
-		std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
-		file << time_buffer;
-		file.close(); // Закрываем файл после записи данных
-	}
-}
+#include "termcolor.hpp"
 
 
-// запись данных из файла в вектор auth
-void writingToVectorsFromFileAuth(std::vector<Authentication>& authentication)
-{
-	std::ifstream auth("Authentication_Data.txt");
-
-	int i = 0;
-	while (!auth.eof())
-	{
-		Authentication authen;
-		auth >> authen.login;
-		auth >> authen.password;
-
-		authentication.push_back(authen);
-		i++;
-	}
-	auth.close();
-}
-
-// запись данных из файла в вектор employee
-void writingToVectorsFromFileEmployee(std::vector<Employee>&employee)
-{
-	std::ifstream empl("Employee_Data.txt");
-	int j = 0;
-	while (!empl.eof())
-	{
-		Employee emp;
-		std::string post1;
-
-		empl >> emp.surName;
-		empl >> emp.name;
-		empl >> emp.patronymic;
-		empl >> emp.gender;
-		empl >> emp.dateOfBirthday;
-		empl >> emp.departmentName;
-		empl >> post1;
-
-		if (post1 == "Junior")
-			emp.post = Post::JUNIOR;
-		else if (post1 == "Middle")
-			emp.post = Post::MIDDLE;
-		else if (post1 == "Senior")
-			emp.post = Post::SENIOR;
-		else if (post1 == "Team_leader")
-			emp.post = Post::TEAM_LEADER;
-		else if (post1 == "Project_manager")
-			emp.post = Post::PROJECT_MANAGER;
-		else if (post1 == "Director_of_department")
-			emp.post = Post::DIRECTOR_OF_DEPARTMENT;
-		else if (post1 == "Deputy_general_director")
-			emp.post = Post::DEPUTY_GENERAL_DIRECTOR;
-		else if (post1 == "General_director")
-			emp.post = Post::GENERAL_DIRECTOR;
-
-		empl >> emp.startDate;
-
-		employee.push_back(emp);
-		
-		j++;
-	}
-	empl.close();
-}
 
 // проверка правильности ввода данных(вход в систему)            
-int checkDataOfUser(std::vector<Authentication>& authentication, int &tries)
+int checkDataOfUser(std::vector<Authentication>& authentication, int &tries, int &entryStatus)
 {
 	std::string login;
 	std::string password;
@@ -109,12 +25,17 @@ int checkDataOfUser(std::vector<Authentication>& authentication, int &tries)
 		std::cin >> login;
 		std::cout << "Введите пароль: ";
 		std::cin >> password;
+		Sleep(700);
+		system("cls");
 
 		for (int i = 0; i < authentication.size(); i++)
 		{
 			if (login == authentication.at(i).login and password == authentication.at(i).password)
 			{
-				std::cout << "Вход выполнен успешно!";
+				std::cout << termcolor::green << "Вход выполнен успешно!" << termcolor::reset;
+				Sleep(2000);
+				writeEntryStatus(entryStatus);
+				system("cls");
 				return 1;
 			}
 		}
@@ -123,7 +44,9 @@ int checkDataOfUser(std::vector<Authentication>& authentication, int &tries)
 			tries++;
 			if (tries > 4)
 				return -100;
-			std::cout << "Данные неверные. Попробуйте ещё раз..." << std::endl;
+			std::cout <<termcolor::red<< "Данные неверные. Попробуйте ещё раз..." <<termcolor::reset<< std::endl;
+			Sleep(2000);
+			system("cls");
 		}
 	}
 }
@@ -210,6 +133,9 @@ void registration(std::vector<Authentication>& authentication)
 
 	auth.close();
 }
+
+
+
 
 //Вывод всех текущих работников.
 void printAllEmployee(std::vector<Employee> & employee)
@@ -315,61 +241,6 @@ void writeEmployeeIntoVector(std::vector<Employee>& employee, std::string surNam
 	emp.startDate = startDate;
 
 	employee.push_back(emp);
-}
-
-// запись в файл нового сотрудника
-void writeInfoOfNewEmployeeInFile(std::vector<Employee>& employee, std::string surName, std::string name, std::string patronymic, std::string gender, std::string dateOfBirthday, std::string departmenrName, std::string post, std::string startDate)
-{
-	std::ofstream empl("Employee_Data.txt", std::ios::app);
-	empl << "\n";
-	empl << surName << " ";
-	empl << name << " ";
-	empl << patronymic << " ";
-	empl << gender << " ";
-	empl << dateOfBirthday << " ";
-	empl << departmenrName << " ";
-	empl << post << " ";
-	empl << startDate;
-
-	empl.close();
-}
-
-// запись данных в файл сотрудников из вектора
-void writeInToFileAfterDeleteEmployee(std::vector<Employee>& employee)
-{
-	std::ofstream empl("Employee_Data.txt");
-
-	for (int i = 0; i < employee.size(); i++)
-	{
-		empl << employee.at(i).surName << " ";
-		empl << employee.at(i).name << " ";
-		empl << employee.at(i).patronymic << " ";
-		empl << employee.at(i).gender << " ";
-		empl << employee.at(i).dateOfBirthday << " ";
-		empl << employee.at(i).departmentName << " ";
-
-		if (static_cast<int>(employee.at(i).post) == 1)
-			empl << "Junior ";
-		else if (static_cast<int>(employee.at(i).post) == 2)
-			empl << "Middle ";
-		else if (static_cast<int>(employee.at(i).post) == 3)
-			empl << "Senior ";
-		else if (static_cast<int>(employee.at(i).post) == 4)
-			empl << "Team_leader ";
-		else if (static_cast<int>(employee.at(i).post) == 5)
-			empl << "Project_manager ";
-		else if (static_cast<int>(employee.at(i).post) == 6)
-			empl << "Director_of_department ";
-		else if (static_cast<int>(employee.at(i).post) == 7)
-			empl << "Deputy_general_diretor ";
-		else if (static_cast<int>(employee.at(i).post) == 8)
-			empl << "General_director ";
-
-		empl << employee.at(i).startDate << std::endl;
-
-	}
-
-	empl.close();
 }
 
 // удаление данных о сотруднике из вектора
@@ -503,6 +374,7 @@ void editEmployee(std::vector<Employee>& employee)
 	Sleep(2000);
 	system("cls");
 }
+
 
 
 
@@ -737,6 +609,7 @@ void searchForStartDate(std::vector<Employee>& employee)
 
 
 
+
 // сортировка по Фамилии в порядке убывания(пузырьком)
 void sortWithSurNameDown(std::vector<Employee> & employee)
 {
@@ -781,9 +654,6 @@ void sortWithSurNameUp(std::vector<Employee>& employee)
 		}
 	}
 }
-
-
-
 
 // поиск наименьшего элемента для сортировки выбором
 int findSmallestPosition(std::vector<Employee> &employee, int startPosition)
@@ -830,7 +700,6 @@ void sortWithPostDown(std::vector<Employee>& employee)
 		std::swap(employee.at(i), employee.at(biggestPosition));
 	}
 }
-
 
 // функция возвращает целое число типа годМесяцДень
 int getNumber(std::vector<Employee>& employee, int index)
@@ -895,6 +764,7 @@ void sortWithExperienceUp(std::vector<Employee>& employee)
 }
 
 
+
 // проверка на пол сотрудника
 int checkGenderOfEmployee(std::vector<Employee>& employee, const int index)
 {
@@ -928,7 +798,6 @@ int ageOfEmployee(std::vector<Employee>&employee, const int index)
 
 	return years;
 }
-
 
 // Поиск сотрудников с пенсионным возрастом
 void searchForEmployeesOfRetirementAge(std::vector<Employee>& employee, std::vector<int> &indexes)
@@ -1029,8 +898,9 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee)
 
 
 
-// англ функции
+// АНГЛ ФУНКЦИИ
 
+// добавление сотрудника
 void engAddNewEmployee(std::vector<Employee>& employee)
 {
 	std::string surName;
@@ -1097,6 +967,7 @@ void engDeleteEmployee(std::vector<Employee>& employee)
 	writeInToFileAfterDeleteEmployee(employee);
 }
 
+// подтверждение операции
 int engAreYouSure()
 {
 	std::string answer;
@@ -1109,6 +980,7 @@ int engAreYouSure()
 		return 0;
 }
 
+// редактирование данных о сотруднике
 void engEditEmployee(std::vector<Employee>& employee)
 {
 	printAllEmployee(employee);

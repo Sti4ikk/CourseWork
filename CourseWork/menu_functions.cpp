@@ -10,27 +10,11 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include "termcolor.hpp"
 
 
-//АВТОРИЗАЦИЯ
-void auth(std::vector<Authentication> &authentication, int &tries)
-{
-	std::cout << "----------------------ПРОГРАММА УЧЁТА СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ------------------------\n";
-	std::cout << "1. Вход.\n"
-			  << "2. Регистрация.\n\n"
-			  << "Ваш выбор: ";
-	int choise;
-	std::cin >> choise;
-	switch (choise)
-	{
-	case(AUTH):     checkDataOfUser(authentication, tries); break;
-	case(REGISTER): registration(authentication);    break;
-	default: break;
-	}
-}
-
-
-long checkHowManyTimeGo()
+// сколько времени прошло с последнего запуска
+long checkHowManyTimeGo(int &entryStatus)
 {
 	// Открываем файл для чтения
 	std::fstream file("Time.txt");
@@ -62,10 +46,38 @@ long checkHowManyTimeGo()
 	std::chrono::duration<int> timeSinceLastExecution = std::chrono::duration_cast<std::chrono::seconds>(currentTime - lastExecution);
 
 	file.close();
+
+	if (timeSinceLastExecution.count() > 30)
+	{
+		entryStatus = 0;
+		std::fstream file("entryStatus.txt");
+
+		file << entryStatus;
+	}
 	// Возвращаем количество секунд, прошедших с последнего запуска
 	return timeSinceLastExecution.count();
 }
 
+
+
+
+// МЕНЮ АВТОРИЗАЦИИ
+void auth(std::vector<Authentication>& authentication, int& tries, int& entryStatus)
+{
+	std::cout << "----------------------ПРОГРАММА УЧЁТА СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ------------------------\n";
+	std::cout << "1. Вход.\n"
+		<< "2. Регистрация.\n\n"
+		<< "Ваш выбор: ";
+	int choise;
+	std::cin >> choise;
+	system("cls");
+	switch (choise)
+	{
+	case(AUTH):     checkDataOfUser(authentication, tries, entryStatus); break;
+	case(REGISTER): registration(authentication);    break;
+	default: break;
+	}
+}
 
 // РУССКОЕ МЕНЮ
 void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
@@ -94,6 +106,7 @@ void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std
 	} while (choise != 4);
 }
 
+// выбор типа сортировки 
 void chooseTypeOfSort(std::vector<Employee>& employee)
 {
 	int choise;
@@ -115,6 +128,7 @@ void chooseTypeOfSort(std::vector<Employee>& employee)
 	default: break;
 	}
 }
+
 // выбор сортировки в порядке убывания или в порядке возрастания
 int typeOFSorting()
 {
@@ -127,6 +141,8 @@ int typeOFSorting()
 
 	return typeOfSort;
 }
+
+// выбор типа поиска
 void chooseTypeOfSearch(std::vector<Employee>& employee)
 {
 	int choise;
@@ -147,6 +163,7 @@ void chooseTypeOfSearch(std::vector<Employee>& employee)
 	default: break;
 	}
 }
+
 // редим редактирования
 void editingMode(std::vector<Employee>& employee)
 {
@@ -176,6 +193,7 @@ void editingMode(std::vector<Employee>& employee)
 
 	} while (choise != 5);
 }
+
 // режим обработки
 void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 {
@@ -204,6 +222,7 @@ void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 	} while (choise != 4);
 }
 
+// настройки
 void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 
@@ -255,6 +274,7 @@ void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& in
 	turnMenuLanguge(choise, employee, indexes, authentication);
 }
 
+// перекулючение меню на другой язык
 void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	if (choise == 1)
@@ -291,6 +311,7 @@ void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std
 	} while (choise != 4);
 }
 
+// выбор типа сортировки 
 void EngChooseTypeOfSort(std::vector<Employee>& employee)
 {
 	int choise;
@@ -312,6 +333,7 @@ void EngChooseTypeOfSort(std::vector<Employee>& employee)
 	default: break;
 	}
 }
+
 // выбор сортировки в порядке убывания или в порядке возрастания
 int EngTypeOFSorting()
 {
@@ -324,6 +346,8 @@ int EngTypeOFSorting()
 
 	return typeOfSort;
 }
+
+// выбор типа поиска
 void EngChooseTypeOfSearch(std::vector<Employee>& employee)
 {
 	int choise;
@@ -344,6 +368,7 @@ void EngChooseTypeOfSearch(std::vector<Employee>& employee)
 	default: break;
 	}
 }
+
 // редим редактирования
 void EngEditingMode(std::vector<Employee>& employee)
 {
@@ -373,6 +398,7 @@ void EngEditingMode(std::vector<Employee>& employee)
 
 	} while (choise != 5);
 }
+
 // режим обработки
 void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 {
@@ -401,6 +427,7 @@ void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& index
 	} while (choise != 4);
 }
 
+// выбор языка 
 void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 	int choise;
@@ -424,6 +451,7 @@ void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& in
 	turnMenuLanguge(choise, employee, indexes, authentication);
 }
 
+// настройки
 void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
 {
 

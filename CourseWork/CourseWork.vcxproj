@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="file_functions.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_functions.cpp" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <Text Include="Authentication_Data.txt" />
     <Text Include="Employee_Data.txt" />
+    <Text Include="entryStatus.txt" />
     <Text Include="Time.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

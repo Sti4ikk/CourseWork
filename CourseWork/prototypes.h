@@ -2,13 +2,14 @@
 #include "structs.h"
 #include <vector>
 
-void secondsSinceLastExecution();
-void auth(std::vector<Authentication>& authentication, int& tries);
-long checkHowManyTimeGo();
+void secondsSinceLastExecution(int& entryStatus);
+void auth(std::vector<Authentication>& authentication, int& tries, int& entryStatus);
+long checkHowManyTimeGo(int& entryStatus);
+void writeEntryStatus(int& entryStatus);
 
 void writingToVectorsFromFileAuth(std::vector<Authentication>& authentication);
 void writingToVectorsFromFileEmployee(std::vector<Employee>& employee);
-int checkDataOfUser(std::vector<Authentication>& authentication, int& tries);
+int checkDataOfUser(std::vector<Authentication>& authentication, int& tries, int& entryStatus);
 int isLoginAvailable(std::string login, std::vector<Authentication>& authentication);
 int isPasswordGood(std::string password);
 void registration(std::vector<Authentication>& authentication);
