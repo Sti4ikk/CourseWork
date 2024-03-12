@@ -144,6 +144,7 @@
     <Text Include="Authentication_Data.txt" />
     <Text Include="Employee_Data.txt" />
     <Text Include="entryStatus.txt" />
+    <Text Include="language.txt" />
     <Text Include="Time.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

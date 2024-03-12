@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <chrono>
 #include "termcolor.hpp"
+#include <conio.h>
 
 
 
@@ -68,23 +69,16 @@ int isLoginAvailable(std::string login, std::vector<Authentication>& authenticat
 }
 
 // проверка на выполнение требований для пароля
-int isPasswordGood(std::string password)
+int isPasswordGood(std::string password, std::string login)
 {
-	std::string digits = "0123456789";
 	// счётчик цифр
 	int count = 0;
 
 	// проверка на наличие цифры в пароле
 	for (int i = 0; i < password.length(); i++)
 	{
-		for (int j = 0; j < 10; j++)
-		{
-			if (password[i] == digits[j])
-			{
-				count++;
-				break;    // потому что нужна хотя бы одна цифра
-			}
-		}
+		if (isdigit(password[i]))
+			count++;
 	}
 
 
@@ -99,8 +93,27 @@ int isPasswordGood(std::string password)
 		}
 	}
 
-	if (password.length() >= 6 and count >= 1 and capitalLetter == 1)
+
+	if (password.length() >= 6 and count >= 1 and capitalLetter == 1 and checkIfLoginInPassword(login, password))
 		return 0; 
+	else
+		return 1;
+}
+
+// подтерждение пароля при регистрации
+int confirmPassword(std::string passwordForConfirm, std::string password)
+{
+	if (password == passwordForConfirm)
+		return 0;
+	else
+		return 1;
+}
+
+// проверка, нет ли в пароле логина(для безопасноти) | 1 - не подходи пароль, 0 - подходит
+int checkIfLoginInPassword(std::string login, std::string password)
+{
+	if (password.find(login) != std::string::npos)
+		return 0;
 	else
 		return 1;
 }
@@ -110,6 +123,7 @@ void registration(std::vector<Authentication>& authentication)
 {
 	std::string login;
 	std::string password;
+	std::string passwordForConfirm;
 
 	do
 	{
@@ -123,14 +137,24 @@ void registration(std::vector<Authentication>& authentication)
 		std::cout << "Введите ваш новый пароль: ";
 		std::cin >> password;
 
-	} while (isPasswordGood(password));  // если она вернет 0, цикл прервётся
+	} while (isPasswordGood(password, login));  // если она вернет 0, цикл прервётся
+
+	do
+	{
+		std::cout << "Подтвердите пароль: ";
+		std::cin >> passwordForConfirm;
+	} while (confirmPassword(passwordForConfirm, password));
+
+	system("cls");
+	std::cout << termcolor::green << "Регистрация прошла успешно!" << termcolor::reset;
+	Sleep(2000);
+	system("cls");
 
 	std::ofstream auth("Authentication_Data.txt", std::ios::app);
 	auth << "\n";
 	auth << login;
 	auth << " ";
 	auth << password;
-
 	auth.close();
 }
 
@@ -205,7 +229,7 @@ void addNewEmployee(std::vector<Employee>& employee)
 	writeEmployeeIntoVector(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
 
 	system("cls");
-	std::cout << "Добавление прошло успешно!";
+	std::cout << termcolor::green << "Добавление прошло успешно!" << termcolor::reset;
 	Sleep(1700);
 	system("cls");
 }
@@ -1068,3 +1092,54 @@ void engEditEmployee(std::vector<Employee>& employee)
 	Sleep(2000);
 	system("cls");
 }
+
+int checkInput()
+{
+		std::cout << "Ваш выбор: ";
+		int choise;
+		std::cin >> choise;
+	
+		if (std::cin.fail()) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			return -1;
+		}
+		else // если всё хорошо, то возвращаем a
+			return choise;
+}
+
+int engCheckInput()
+{
+	std::cout << "Your choise: ";
+	int choise;
+	std::cin >> choise;
+
+	if (std::cin.fail()) // если предыдущее извлечение оказалось неудачным,
+	{
+		std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+		std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+		return -1;
+	}
+	else // если всё хорошо, то возвращаем a
+		return choise;
+}
+
+/*std::string checkInput(std::string variable)
+{
+	while (true)
+	{
+		std::cout << "Enter a double value: ";
+		std::string variable;
+		std::cin >> variable;
+
+		if (std::cin.fail()) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+
+		}
+		else // если всё хорошо, то возвращаем a
+			return variable;
+	}
+} */

@@ -6,12 +6,16 @@ void secondsSinceLastExecution(int& entryStatus);
 void auth(std::vector<Authentication>& authentication, int& tries, int& entryStatus);
 long checkHowManyTimeGo(int& entryStatus);
 void writeEntryStatus(int& entryStatus);
+void writeLanguageInFile(int& languageStatus);
 
 void writingToVectorsFromFileAuth(std::vector<Authentication>& authentication);
 void writingToVectorsFromFileEmployee(std::vector<Employee>& employee);
 int checkDataOfUser(std::vector<Authentication>& authentication, int& tries, int& entryStatus);
 int isLoginAvailable(std::string login, std::vector<Authentication>& authentication);
-int isPasswordGood(std::string password);
+int confirmPassword(std::string passwordForConfirm, std::string password);
+int checkIfLoginInPassword(std::string login, std::string password);
+
+int isPasswordGood(std::string password, std::string login);
 void registration(std::vector<Authentication>& authentication);
 void printAllEmployee(std::vector<Employee>& employee);
 void addNewEmployee(std::vector<Employee>& employee);
@@ -48,31 +52,35 @@ void getExperienceOfEmployees(std::vector<Employee> const& employee);
 int ageOfEmployee(std::vector<Employee>& employee, const int index);
 
 
-void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
 void editingMode(std::vector<Employee>& employee);
 
 void chooseTypeOfSearch(std::vector<Employee>& employee);
 void chooseTypeOfSort(std::vector<Employee>& employee);
 int typeOFSorting();
 void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
-void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
-void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int&languageStatus);
+void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
 void writeInToFileAfterDeleteEmployee(std::vector<Employee>& employee);
 
-void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
 
 // англ функции МЕНЮ
-void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
 void EngChooseTypeOfSort(std::vector<Employee>& employee);
 int EngTypeOFSorting();
 void EngChooseTypeOfSearch(std::vector<Employee>& employee);
 void EngEditingMode(std::vector<Employee>& employee);
 void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& indexes);
-void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
 
 // англ функции 
 void engAddNewEmployee(std::vector<Employee>& employee);
 void engDeleteEmployee(std::vector<Employee>& employee);
 int engAreYouSure();
 void engEditEmployee(std::vector<Employee>& employee);
-void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication);
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus);
+
+int checkInput(); 
+int engCheckInput();
+//std::string checkInput(std::string variable);

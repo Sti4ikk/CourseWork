@@ -1,4 +1,5 @@
 #include "all_headers.h"
+ 
 
 std::vector<Employee> employee;
 std::vector<Authentication> authentication;
@@ -10,6 +11,11 @@ int main()
 	setlocale(0, "rus");
 	int tries = 0;
 	int entryStatus;
+	// записываем в переменную 0 или 1, чтобы знать ,на какаом языке запсукать прогу(0 - русский, 1 - английский)
+	int languageStatus;
+	std::fstream file1("language.txt");
+	file1 >> languageStatus;
+	file1.close();
 
 
 	// запись данных в векторы 
@@ -28,7 +34,7 @@ int main()
 	std::ifstream file("entryStatus.txt");
 	file >> entryStatus;
 
-	if (seconds >= 30 or entryStatus == 0)
+	if (seconds >= 2000 or entryStatus == 0)
 		auth(authentication, tries, entryStatus);
 
 	if (tries > 4)
@@ -54,7 +60,11 @@ int main()
 	//searchForEmployeesOfRetirementAge(employee, indexes);
 	//printEmployeesOfRetirementAge(employee, indexes);
 
-	RusMainMenu(employee, indexes, authentication);
+	if(languageStatus == 0)
+		RusMainMenu(employee, indexes, authentication, languageStatus);
+	else if (languageStatus == 1)
+		EngMainMenu(employee, indexes, authentication, languageStatus);
+
 
 	return 0;
 }

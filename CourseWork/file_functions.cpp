@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 #include "termcolor.hpp"
+#include <conio.h>
 
 // запись в файл состояния входа
 void writeEntryStatus(int& entryStatus)
@@ -158,4 +159,12 @@ void secondsSinceLastExecution(int& entryStatus)
 		file << time_buffer;
 		file.close(); // Закрываем файл после записи данных
 	}
+}
+
+// проверка состояния языка
+void writeLanguageInFile(int &languageStatus)
+{
+	std::fstream file("language.txt");
+	file << languageStatus;
+	file.close();
 }

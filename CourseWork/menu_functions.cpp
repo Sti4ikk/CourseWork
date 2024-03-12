@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include "termcolor.hpp"
+#include <conio.h>
 
 
 // сколько времени прошло с последнего запуска
@@ -21,7 +22,7 @@ long checkHowManyTimeGo(int &entryStatus)
 
 	// Проверяем, удалось ли открыть файл
 	if (!file.is_open()) {
-		std::cerr << "Error: Unable to open last_execution.txt" << std::endl;
+		std::cerr << "Error: Unable to open Time.txt" << std::endl;
 		return -1; // Возвращаем -1 в случае ошибки
 	}
 
@@ -47,7 +48,7 @@ long checkHowManyTimeGo(int &entryStatus)
 
 	file.close();
 
-	if (timeSinceLastExecution.count() > 30)
+	if (timeSinceLastExecution.count() > 2000)
 	{
 		entryStatus = 0;
 		std::fstream file("entryStatus.txt");
@@ -60,27 +61,28 @@ long checkHowManyTimeGo(int &entryStatus)
 
 
 
-
 // МЕНЮ АВТОРИЗАЦИИ
 void auth(std::vector<Authentication>& authentication, int& tries, int& entryStatus)
 {
-	std::cout << "----------------------ПРОГРАММА УЧЁТА СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ------------------------\n";
-	std::cout << "1. Вход.\n"
-		<< "2. Регистрация.\n\n"
-		<< "Ваш выбор: ";
-	int choise;
-	std::cin >> choise;
-	system("cls");
-	switch (choise)
+	do
 	{
-	case(AUTH):     checkDataOfUser(authentication, tries, entryStatus); break;
-	case(REGISTER): registration(authentication);    break;
-	default: break;
-	}
+		std::cout << "----------------------ПРОГРАММА УЧЁТА СТАЖА СОТРУДНИКОВ ПРЕДПРИЯТИЯ------------------------\n";
+		std::cout << "1. Вход.\n"
+				  << "2. Регистрация.\n\n";
+
+		int choise = checkInput();
+		system("cls");
+		switch (choise)
+		{
+		case(AUTH):     checkDataOfUser(authentication, tries, entryStatus); return;
+		case(REGISTER): registration(authentication);    return;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
+		}
+	} while (true);
 }
 
 // РУССКОЕ МЕНЮ
-void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus)
 {
 	int choise;
 	do
@@ -91,16 +93,15 @@ void RusMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std
 		std::cout << "3. Настройки.\n";
 		std::cout << "4. Выход.\n\n";
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
+		choise = checkInput();
 		system("cls");
 		switch (choise)
 		{
 		case(EDITING_MODE): editingMode(employee); break;
 		case(PROCESSING_MODE): processsingMode(employee, indexes); break;
-		case(SETTINGS): rusSettings(employee, indexes, authentication); break;
-		default: break;
+		case(SETTINGS): rusSettings(employee, indexes, authentication, languageStatus); break;
+		case(EXIT): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 4);
@@ -177,18 +178,17 @@ void editingMode(std::vector<Employee>& employee)
 		std::cout << "4. Удалить сотрудника.\n";
 		std::cout << "5. Вернуться назад.\n\n";
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
+		choise = checkInput();
 		system("cls");
 		switch (choise)
 		{
-		case(CHECKING): std::cout << "Вот список всех текущих сотрудников: \n\n"; printAllEmployee(employee); break;
+		case(CHECKING): std::cout << "Вот список всех текущих сотрудников: \n\n"; printAllEmployee(employee); std::cout << "Нажмите любую клавишу для продолжения...";
+			_getch(); system("cls"); break;
 		case(ADDING):   addNewEmployee(employee);   break;
 		case(EDITING):  editEmployee(employee);     break;
 		case(DELETING): deleteEmployee(employee);   break;
-		case(E_BACK):
-		default: break;
+		case(E_BACK): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 5);
@@ -206,86 +206,100 @@ void processsingMode(std::vector<Employee>& employee, std::vector<int>& indexes)
 		std::cout << "3. Поиск сотрудников пенсионного возраста.\n";
 		std::cout << "4. Назад.\n\n";
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
+		choise = checkInput();
 		system("cls");
 		switch (choise)
 		{
 		case(SEARCH): chooseTypeOfSearch(employee); break;
 		case(SORTING): chooseTypeOfSort(employee); break;
 		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
-		case(P_BACK):
-		default: break;
+		case(P_BACK): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 4);
 }
 
 // настройки
-void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void rusSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus)
 {
-
 	int choise;
-
 	do
 	{
 		std::cout << "----------------------------------------------НАСТРОЙКИ---------------------------------------------------------------\n";
 		std::cout << "1. Язык.\n";
 		std::cout << "2. Назад.\n";
 
-		std::cout << "Ваш выбор: ";
-		std::cin >> choise;
-
+		choise = checkInput();
 		system("cls");
 		switch (choise)
 		{
-		case(LANGUAGE): rusChooseMenuLanguage(employee, indexes, authentication); break;
-		case(S_BACK):
-		default: break;
+		case(LANGUAGE): rusChooseMenuLanguage(employee, indexes, authentication, languageStatus); break;
+		case(S_BACK): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 2);
 }
 
 // возврыщает 1 - русский язык, 2 - английский язык
-void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void rusChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int &languageStatus)
 {
 	int choise;
-	std::cout << "----------------------------------------------НАСТРОЙКИ ЯЗЫКА---------------------------------------------------------\n";
-	std::cout << "1. Русский.\n";
-	std::cout << "2. English.\n";
-
-	std::cout << "Выберите язык: ";
-	std::cin >> choise;
-	system("cls");
-
-	std::cout << "Переключение языка";
-	for (int i = 0; i < 3; i++)
+	do 
 	{
-		Sleep(600);
-		std::cout << ".";
-	}
-	system("cls");
-	std::cout << "Переключение прошло успешно!";
-	Sleep(2500);
-	system("cls");
+		std::cout << "----------------------------------------------НАСТРОЙКИ ЯЗЫКА---------------------------------------------------------\n";
+		std::cout << "1. Русский.\n";
+		std::cout << "2. English.\n";
 
-	turnMenuLanguge(choise, employee, indexes, authentication);
+		choise = checkInput();
+		system("cls");
+
+		if (choise == 1 or choise == 2)
+		{
+			if (choise == 1)
+				languageStatus = 0;
+			else if (choise == 2)
+				languageStatus = 1;
+
+			writeLanguageInFile(languageStatus);
+
+			std::cout << "Переключение языка";
+			for (int i = 0; i < 3; i++)
+			{
+				Sleep(600);
+				std::cout << ".";
+			}
+			system("cls");
+
+			std::cout << termcolor::green << "Переключение прошло успешно!" << termcolor::reset;
+			Sleep(2000);
+			system("cls");
+
+			turnMenuLanguge(choise, employee, indexes, authentication, languageStatus);
+			return;
+		}
+		else
+		{
+			std::cout << termcolor::red << "Выберите цифру из списка!" << termcolor::reset;
+			Sleep(1300);
+			system("cls");
+		}
+	} while (true);
 }
 
 // перекулючение меню на другой язык
-void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void turnMenuLanguge(int choise, std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus)
 {
 	if (choise == 1)
-		RusMainMenu(employee, indexes, authentication);
+		RusMainMenu(employee, indexes, authentication, languageStatus);
 	else if (choise == 2)
-		EngMainMenu(employee, indexes, authentication);
+		EngMainMenu(employee, indexes, authentication, languageStatus);
 }
 
 
 //АНГЛИЙСКОЕ МЕНЮ
-void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus)
 {
 	int choise;
 	do
@@ -296,16 +310,15 @@ void EngMainMenu(std::vector<Employee>& employee, std::vector<int>& indexes, std
 		std::cout << "3. Settings.\n";
 		std::cout << "4. Exit.\n\n";
 
-		std::cout << "Your choise: ";
-		std::cin >> choise;
-
+		choise = engCheckInput();
 		system("cls");
 		switch (choise)
 		{
 		case(EDITING_MODE): EngEditingMode(employee); break;
 		case(PROCESSING_MODE): EngProcesssingMode(employee, indexes); break;
-		case(SETTINGS): engSettings(employee, indexes, authentication); break;
-		default: break;
+		case(SETTINGS): engSettings(employee, indexes, authentication, languageStatus); break;
+		case(EXIT): break;
+		default: std::cout << termcolor::red << "Choose number from list!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 4);
@@ -369,7 +382,7 @@ void EngChooseTypeOfSearch(std::vector<Employee>& employee)
 	}
 }
 
-// редим редактирования
+// режим редактирования
 void EngEditingMode(std::vector<Employee>& employee)
 {
 	int choise;
@@ -382,9 +395,7 @@ void EngEditingMode(std::vector<Employee>& employee)
 		std::cout << "4. Delete employee.\n";
 		std::cout << "5. Back.\n\n";
 
-		std::cout << "Your choise: ";
-		std::cin >> choise;
-
+		choise = engCheckInput();
 		system("cls");
 		switch (choise)
 		{
@@ -392,8 +403,8 @@ void EngEditingMode(std::vector<Employee>& employee)
 		case(ADDING):   engAddNewEmployee(employee);   break;
 		case(EDITING):  engEditEmployee(employee);     break;
 		case(DELETING): engDeleteEmployee(employee);   break;
-		case(E_BACK):
-		default: break;
+		case(E_BACK): break;
+		default: std::cout << termcolor::red << "Choose number from list!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 5);
@@ -411,48 +422,68 @@ void EngProcesssingMode(std::vector<Employee>& employee, std::vector<int>& index
 		std::cout << "3. Search for employees of retirement age.\n";
 		std::cout << "4. Back.\n\n";
 
-		std::cout << "Your choice: ";
-		std::cin >> choise;
-
+		choise = engCheckInput();
 		system("cls");
 		switch (choise)
 		{
 		case(SEARCH): chooseTypeOfSearch(employee); break;
 		case(SORTING): chooseTypeOfSort(employee); break;
 		case(INDIVIDUAL_TASK): searchForEmployeesOfRetirementAge(employee, indexes); break;
-		case(P_BACK):
-		default: break;
+		case(P_BACK): break;
+		default: std::cout << termcolor::red << "Choose number from list!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 4);
 }
 
 // выбор языка 
-void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void engChooseMenuLanguage(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int &languageStatus)
 {
 	int choise;
-	std::cout << "1. Russian.\n";
-	std::cout << "2. English.\n";
-	std::cout << "Choose language: ";
-	std::cin >> choise;
-	system("cls");
-
-	std::cout << "Switching language";
-	for (int i = 0; i < 3; i++)
+	do
 	{
-		Sleep(600);
-		std::cout << ".";
-	}
-	system("cls");
-	std::cout << "The switch was successful!";
-	Sleep(2500);
-	system("cls");
+		std::cout << "-----------------------------------------SETTINGS OF LANGUAGE----------------------------------------------------\n";
+		std::cout << "1. Русский.\n";
+		std::cout << "2. English.\n";
 
-	turnMenuLanguge(choise, employee, indexes, authentication);
+		choise = engCheckInput();
+		system("cls");
+
+		if (choise == 1 or choise == 2)
+		{
+			if (choise == 1)
+				languageStatus = 0;
+			else if (choise == 2)
+				languageStatus = 1;
+
+			writeLanguageInFile(languageStatus);
+
+			std::cout << "Switching language";
+			for (int i = 0; i < 3; i++)
+			{
+				Sleep(600);
+				std::cout << ".";
+			}
+			system("cls");
+
+			std::cout << termcolor::green << "The switch was successful!" << termcolor::reset;
+			Sleep(2000);
+			system("cls");
+
+			turnMenuLanguge(choise, employee, indexes, authentication, languageStatus);
+			return;
+		}
+		else
+		{
+			std::cout << termcolor::red << "Choose number from list!" << termcolor::reset;
+			Sleep(1300);
+			system("cls");
+		}
+	} while (true);
 }
 
 // настройки
-void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication)
+void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std::vector<Authentication>& authentication, int& languageStatus)
 {
 
 	int choise;
@@ -463,15 +494,13 @@ void engSettings(std::vector<Employee>& employee, std::vector<int>& indexes, std
 		std::cout << "1. Language.\n";
 		std::cout << "2. Back.\n";
 
-		std::cout << "Your choise: ";
-		std::cin >> choise;
-
+		choise = checkInput();
 		system("cls");
 		switch (choise)
 		{
-		case(LANGUAGE): engChooseMenuLanguage(employee, indexes, authentication); break;
-		case(S_BACK):
-		default: break;
+		case(LANGUAGE): engChooseMenuLanguage(employee, indexes, authentication, languageStatus); break;
+		case(S_BACK): break;
+		default: std::cout << termcolor::red << "Choose number from list!" << termcolor::reset; Sleep(2000); system("cls");
 		}
 
 	} while (choise != 2);
