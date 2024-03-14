@@ -270,25 +270,46 @@ void writeEmployeeIntoVector(std::vector<Employee>& employee, std::string surNam
 // удаление данных о сотруднике из вектора
 void deleteEmployee(std::vector<Employee>& employee)
 {
-	printAllEmployee(employee);
-
 	int number;
-	std::cout << "Введите номер сотрудника из списка для удаления: ";
-	std::cin >> number;
+
+	while (true)
+	{
+		std::cout << "Список сотрудников: \n\n";
+		printAllEmployee(employee);
+
+		std::cout << "Введите номер сотрудника из списка для удаления: ";
+		std::cin >> number;
+
+		if (std::cin.fail() or (number < 1 or number > employee.size())) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Введите номер из списка!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else // если всё хорошо, то возвращаем a
+		{
+			system("cls");
+			break;
+		}
+	}
 	system("cls");
 
 	if (areYouSure())
 	{
 		employee.erase(employee.begin() + number - 1);
 		system("cls");
-		std::cout << "Удаление прошло успешно!";
-		Sleep(1900);
+		std::cout << termcolor::green << "Удаление прошло успешно!" << termcolor::reset;
+		Sleep(2000);
 		system("cls");
 	}
 	else
 	{
 		system("cls");
-		std::cout << "Удаление не было выполнено!";
+		std::cout << termcolor::red << "Удаление не было выполнено!" << termcolor::reset;
 		Sleep(2000);
 		system("cls");
 	}
@@ -312,27 +333,62 @@ int areYouSure()
 // редактирование записей о сотрудниках
 void editEmployee(std::vector<Employee>& employee)
 {
-	printAllEmployee(employee);
-
 	int number;
-	std::cout << "Введите номер сотрудника, данные которого хотите отредактировать: ";
-	std::cin >> number;
-
-	
-	std::cout << "1. Фамилия" << std::endl;
-	std::cout << "2. Имя" << std::endl;
-	std::cout << "3. Отчество" << std::endl;
-	std::cout << "4. Пол" << std::endl;
-	std::cout << "5. Дата рождения" << std::endl;
-	std::cout << "6. Название отдела" << std::endl;
-	std::cout << "7. Должность" << std::endl;
-	std::cout << "8. Дата начала работы\n" << std::endl;
-
-	std::cout << "Выберите, что именно хотите отредактировать: ";
-
 	int answer;
-	std::cin >> answer;
-	std::cout << std::endl;
+	while (true)
+	{
+		printAllEmployee(employee);
+		std::cout << "Введите номер сотрудника, данные которого хотите отреактировать: ";
+
+		std::cin >> number;
+		if (std::cin.fail() or (number < 1 or number > employee.size())) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Введите номер из списка!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else // если всё хорошо, то возвращаем a
+		{
+			system("cls");
+			break;
+		}
+	}
+
+	do
+	{
+		std::cout << "1. Фамилия" << std::endl;
+		std::cout << "2. Имя" << std::endl;
+		std::cout << "3. Отчество" << std::endl;
+		std::cout << "4. Пол" << std::endl;
+		std::cout << "5. День рождения" << std::endl;
+		std::cout << "6. Название отдела" << std::endl;
+		std::cout << "7. Должность" << std::endl;
+		std::cout << "8. Дата начала работы\n" << std::endl;
+
+		std::cout << "Выберите, что хотите изменить: ";
+
+		std::cin >> answer;
+		std::cout << std::endl;
+		if (std::cin.fail() or (answer < 1 or answer > 8)) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Выберите номер из списка!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else
+		{
+			system("cls");
+			break;
+		}
+	} while (true);
 
 	std::string newInfo;
 	std::cout << "Введите корректную информацию: ";
@@ -346,7 +402,7 @@ void editEmployee(std::vector<Employee>& employee)
 	case(4): employee.at(number - 1).gender = newInfo; break;
 	case(5): employee.at(number - 1).dateOfBirthday = newInfo; break;
 	case(6): employee.at(number - 1).departmentName = newInfo; break;
-	case(7): 
+	case(7):
 		if (newInfo == "Junior")
 		{
 			employee.at(number - 1).post = Post::JUNIOR;
@@ -388,14 +444,14 @@ void editEmployee(std::vector<Employee>& employee)
 			break;
 		}
 	case(8): employee.at(number - 1).startDate = newInfo; break;
-	default: std::cout<<"Введите цифру из списка!";
+	default: break;
 	}
 
-
 	writeInToFileAfterDeleteEmployee(employee);
+
 	system("cls");
-	std::cout << "Редактирование данных прошло успешно!";
-	Sleep(2000);
+	std::cout << termcolor::green << "Редактирование данных прошло успешно!" << termcolor::reset;
+	Sleep(1800);
 	system("cls");
 }
 
@@ -405,69 +461,78 @@ void editEmployee(std::vector<Employee>& employee)
 // поиск по фамилии
 void searchForSurName(std::vector<Employee>& employee)
 {
-	std::string surName;
-	std::cout << "Введите фамилию сотрудника: ";
-	std::cin >> surName;
-	system("cls");
+		std::string surName;
+		std::cout << "Введите фамилию сотрудника: ";
+		std::cin >> surName;
+		system("cls");
 
-	bool isThereAtLeastOne = false;
-	bool onlyOneTime = false;
+		bool isThereAtLeastOne = false;
+		bool onlyOneTime = false;
 
-	for (int i = 0; i < employee.size(); i++)
-	{
-		int index = i;
-		if (employee[i].surName == surName)
+		for (int i = 0; i < employee.size(); i++)
 		{
-			isThereAtLeastOne = true;
-
-			isThereAtLeastOne = true;
-			if (!onlyOneTime)
+			int index = i;
+			if (employee[i].surName == surName)
 			{
-				std::cout << "Найденный/ые сотрудник/и: " << std::endl;
-				onlyOneTime = true;
-			}
+				isThereAtLeastOne = true;
 
-			for (int j = 0; j < 1; j++)
-			{
-				std::cout << employee.at(index).surName << " ";
-				std::cout << employee.at(index).name << " ";
-				std::cout << employee.at(index).patronymic << " ";
-				std::cout << employee.at(index).gender << " ";
-				std::cout << employee.at(index).dateOfBirthday << " ";
-				std::cout << employee.at(index).departmentName << " ";
-
-				switch (employee.at(index).post) {
-				case Post::JUNIOR:
-					std::cout << "Junior ";
-					break;
-				case Post::MIDDLE:
-					std::cout << "Middle ";
-					break;
-				case Post::SENIOR:
-					std::cout << "Senior ";
-					break;
-				case Post::TEAM_LEADER:
-					std::cout << "Team_leader ";
-					break;
-				case Post::PROJECT_MANAGER:
-					std::cout << "Project_manager ";
-					break;
-				case Post::DIRECTOR_OF_DEPARTMENT:
-					std::cout << "Director_of_department ";
-					break;
-				case Post::DEPUTY_GENERAL_DIRECTOR:
-					std::cout << "Deputy_general_director ";
-					break;
-				case Post::GENERAL_DIRECTOR:
-					std::cout << "General_director ";
-					break;
+				isThereAtLeastOne = true;
+				if (!onlyOneTime)
+				{
+					std::cout << "Найденный/ые сотрудник/и: \n\n";
+					onlyOneTime = true;
 				}
-				std::cout << employee.at(index).startDate << " " << std::endl;
+
+				for (int j = 0; j < 1; j++)
+				{
+					std::cout << employee.at(index).surName << " ";
+					std::cout << employee.at(index).name << " ";
+					std::cout << employee.at(index).patronymic << " ";
+					std::cout << employee.at(index).gender << " ";
+					std::cout << employee.at(index).dateOfBirthday << " ";
+					std::cout << employee.at(index).departmentName << " ";
+
+					switch (employee.at(index).post) {
+					case Post::JUNIOR:
+						std::cout << "Junior ";
+						break;
+					case Post::MIDDLE:
+						std::cout << "Middle ";
+						break;
+					case Post::SENIOR:
+						std::cout << "Senior ";
+						break;
+					case Post::TEAM_LEADER:
+						std::cout << "Team_leader ";
+						break;
+					case Post::PROJECT_MANAGER:
+						std::cout << "Project_manager ";
+						break;
+					case Post::DIRECTOR_OF_DEPARTMENT:
+						std::cout << "Director_of_department ";
+						break;
+					case Post::DEPUTY_GENERAL_DIRECTOR:
+						std::cout << "Deputy_general_director ";
+						break;
+					case Post::GENERAL_DIRECTOR:
+						std::cout << "General_director ";
+						break;
+					}
+					std::cout << employee.at(index).startDate << " " << std::endl;
+				}
 			}
 		}
-	}
-	if (!isThereAtLeastOne)
-		std::cout << "Не найдено сотрудников с такой фамилией!\n";
+		if (!isThereAtLeastOne)
+		{
+			std::cout << termcolor::red << "Не найдено сотрудников с такой фамилией!" << termcolor::reset;
+			Sleep(1800);
+			system("cls");
+			return;
+		}
+		std::cout << "\nНажмите любую клавишу...";
+		_getch();
+
+		system("cls");
 }
 
 // поиск по должности
@@ -512,7 +577,7 @@ void searchForPost(std::vector<Employee>& employee)
 			isThereAtLeastOne = true;
 			if (!onlyOneTime)
 			{
-				std::cout << "Найденный/ые сотрудник/и: " << std::endl;
+				std::cout << "Найденный/ые сотрудник/и:\n\n";
 				onlyOneTime = true;
 			}
 			for (int j = 0; j < 1; j++)
@@ -558,16 +623,42 @@ void searchForPost(std::vector<Employee>& employee)
 	}
 
 	if (!isThereAtLeastOne)
-		std::cout << "Не найдено сотрудников, имеющих данную должность!" << std::endl;
+	{
+		std::cout << termcolor::red << "Не найдено сотрудников, имеющих данную должность!\n" << termcolor::reset;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
+
+	std::cout << "\nНажмите любую клавишу...";
+	_getch();
+	system("cls");
 }
 
 // поиск по дате начала работы
 void searchForStartDate(std::vector<Employee>& employee)
 {
 	int startDate;
-	std::cout << "Введите год начала работы сотрудника: ";
-	std::cin >> startDate;
+
+	while (true)
+	{
+		std::cout << "Введите год начала работы сотрудника: ";
+		std::cin >> startDate;
+
+		if (std::cin.fail()) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Введите корректуню дату!" << termcolor::reset;
+			Sleep(1500);
+			system("cls");
+		}
+		else
+			break;
+	}
 	system("cls");
+
 
 	bool isThereAtLeastOne = false;
 	bool onlyOneTime = false;
@@ -583,7 +674,7 @@ void searchForStartDate(std::vector<Employee>& employee)
 			isThereAtLeastOne = true;
 			if (!onlyOneTime)
 			{
-				std::cout << "Найденный/ые сотрудник/и: " << std::endl;
+				std::cout << "Найденный/ые сотрудник/и: \n\n";
 				onlyOneTime = true;
 			}
 
@@ -628,9 +719,17 @@ void searchForStartDate(std::vector<Employee>& employee)
 		}
 	}
 	if (!isThereAtLeastOne)
-		std::cout << "Не найдено сотрудников с данным годом начала работы!\n";
-}
+	{
+		std::cout << termcolor::red << "Не найдено сотрудников с данным годом начала работы!\n" << termcolor::reset;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
 
+	std::cout << "\nНажмите любую клавишу...";
+	_getch();
+	system("cls");
+}
 
 
 
@@ -843,11 +942,11 @@ void printEmployeesOfRetirementAge(std::vector<Employee> & employee, std::vector
 
 	if (indexes.empty())
 	{
-		std::cout << "Сотрудников с пенсионным возрастом нет.\n\n";
+		std::cout << "Сотрудников пенсионного возраста нет.\n\n";
 		return;
 	}
 		
-	std::cout << "Список сорудников пенсионного возраста: " << std::endl;
+	std::cout << "Список сорудников пенсионного возраста: \n\n";
 	for (int i = 0, j = 0; i < indexes.size(); i++, j++)
 	{
 		std::cout << employee.at(indexes.at(j)).surName << " ";
@@ -888,6 +987,9 @@ void printEmployeesOfRetirementAge(std::vector<Employee> & employee, std::vector
 		std::cout << employee.at(indexes.at(j)).startDate << " " << std::endl;
 	}
 	std::cout << std::endl;
+	std::cout << "Нажмите любую клавишу...";
+	_getch();
+	system("cls");
 }
 
 // получаем стаж сотрудников в годах, месяцах и днях
@@ -957,7 +1059,7 @@ void engAddNewEmployee(std::vector<Employee>& employee)
 	writeEmployeeIntoVector(employee, surName, name, patronymic, gender, dateOfBirthday, departmentName, post, startDate);
 
 	system("cls");
-	std::cout << "Addition was successful!";
+	std::cout <<termcolor::green<< "Addition was successful!"<<termcolor::reset;
 	Sleep(1700);
 	system("cls");
 }
@@ -965,25 +1067,47 @@ void engAddNewEmployee(std::vector<Employee>& employee)
 // удаление данных о сотруднике из вектора
 void engDeleteEmployee(std::vector<Employee>& employee)
 {
-	std::cout << "List of current employees: \n\n";
-	printAllEmployee(employee);
 
 	int number;
-	std::cout << "Enter the employee number from the list to be deleted: ";
-	std::cin >> number;
+
+	while (true)
+	{
+		std::cout << "List of current employees: \n\n";
+		printAllEmployee(employee);
+
+		std::cout << "Enter the employee number from the list to be deleted: ";
+		std::cin >> number;
+	
+		if (std::cin.fail() or (number < 1 or number > employee.size())) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Choose number from the list!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else // если всё хорошо, то возвращаем a
+		{
+			system("cls");
+			break;
+		}
+	}
+	system("cls");
 
 	if (engAreYouSure())
 	{
 		employee.erase(employee.begin() + number - 1);
 		system("cls");
-		std::cout << "Removal was successful!";
+		std::cout << termcolor::green << "Removal was successful!" << termcolor::reset;
 		Sleep(2000);
 		system("cls");
 	}
 	else
 	{
 		system("cls");
-		std::cout << "Удаление не было выполнено!";
+		std::cout << termcolor::red << "Removal was not completed!" << termcolor::reset;
 		Sleep(2000);
 		system("cls");
 	}
@@ -1007,26 +1131,63 @@ int engAreYouSure()
 // редактирование данных о сотруднике
 void engEditEmployee(std::vector<Employee>& employee)
 {
-	printAllEmployee(employee);
 
 	int number;
-	std::cin >> number;
-
-	std::cout << "Choose what you want to edit: " << std::endl;
-	std::cout << "1. Surname" << std::endl;
-	std::cout << "2. Name" << std::endl;
-	std::cout << "3. Patronymic" << std::endl;
-	std::cout << "4. Gender" << std::endl;
-	std::cout << "5. Date of birthday" << std::endl;
-	std::cout << "6. Name of department" << std::endl;
-	std::cout << "7. Post" << std::endl;
-	std::cout << "8. Start date\n" << std::endl;
-
-	std::cout << "Enter the number of the employee whose details you want to edit: ";
-
 	int answer;
-	std::cin >> answer;
-	std::cout << std::endl;
+	while (true)
+	{
+		printAllEmployee(employee);
+		std::cout << "Enter the number of the employee whose details you want to edit: ";
+
+		std::cin >> number;
+		if (std::cin.fail() or (number < 1 or number > employee.size())) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Choose number from the list!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else // если всё хорошо, то возвращаем a
+		{
+			system("cls");
+			break;
+		}
+	}
+	
+	do
+	{
+		std::cout << "1. Surname" << std::endl;
+		std::cout << "2. Name" << std::endl;
+		std::cout << "3. Patronymic" << std::endl;
+		std::cout << "4. Gender" << std::endl;
+		std::cout << "5. Date of birthday" << std::endl;
+		std::cout << "6. Name of department" << std::endl;
+		std::cout << "7. Post" << std::endl;
+		std::cout << "8. Start date\n" << std::endl;
+
+		std::cout << "Choose what you want to edit: ";
+
+		std::cin >> answer;
+		std::cout << std::endl;
+		if (std::cin.fail() or (answer < 1 or answer > 8)) // если предыдущее извлечение оказалось неудачным,
+		{
+			std::cin.clear(); // то возвращаем cin в 'обычный' режим работы
+			std::cin.ignore(32767, '\n'); // и удаляем значения предыдущего
+			system("cls");
+			std::cout << termcolor::red << "Choose number from the list!" << termcolor::reset;
+			Sleep(1700);
+			system("cls");
+			continue;
+		}
+		else
+		{
+			system("cls");
+			break;
+		}
+	} while (true);
 
 	std::string newInfo;
 	std::cout << "Please enter correct information: ";
@@ -1082,14 +1243,14 @@ void engEditEmployee(std::vector<Employee>& employee)
 			break;
 		}
 	case(8): employee.at(number - 1).startDate = newInfo; break;
-	default: std::cout << "Enter a number from the list!";
+	default: break;
 	}
 
 	writeInToFileAfterDeleteEmployee(employee);
 
 	system("cls");
-	std::cout << "Редактирование данных прошло успешно!";
-	Sleep(2000);
+	std::cout <<termcolor::green<< "Data editing was successful!"<<termcolor::reset;
+	Sleep(1800);
 	system("cls");
 }
 

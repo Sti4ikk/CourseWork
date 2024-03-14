@@ -9,6 +9,9 @@ std::vector<int> indexes;
 int main()
 {
 	setlocale(0, "rus");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
 	int tries = 0;
 	int entryStatus;
 	// записываем в переменную 0 или 1, чтобы знать ,на какаом €зыке запсукать прогу(0 - русский, 1 - английский)

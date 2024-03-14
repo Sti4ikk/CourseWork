@@ -112,22 +112,26 @@ void chooseTypeOfSort(std::vector<Employee>& employee)
 {
 	int choise;
 
-	std::cout << "1. Сортировка по Фамилии.\n";
-	std::cout << "2. Сортировка по должности.\n";
-	std::cout << "3. Сортировка по стажу.\n\n";
-
-	std::cout << "Выберите критерий, по которому будет осуществлена сортировка: ";
-	std::cin >> choise;
-	system("cls");
-
-	switch (choise)
+	do
 	{
-	case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
-	case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
-	case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
-	case(4):      // доделать
-	default: break;
-	}
+		std::cout << "----------------------------------------------СОРТИРОВКИ----------------------------------------------------------------";
+		std::cout << "1. Сортировка по Фамилии.\n";
+		std::cout << "2. Сортировка по должности.\n";
+		std::cout << "3. Сортировка по стажу.\n";
+		std::cout << "4. Вернуться назад\n\n";
+
+		choise = checkInput();
+		system("cls");
+
+		switch (choise)
+		{
+		case(1): if (typeOFSorting() == 1) sortWithSurNameUp(employee); else if (typeOFSorting() == 2) sortWithSurNameDown(employee); break;
+		case(2): if (typeOFSorting() == 1) sortWithPostUp(employee); else if (typeOFSorting() == 2) sortWithPostDown(employee); break;
+		case(3): if (typeOFSorting() == 1) sortWithExperienceUp(employee); else if (typeOFSorting() == 2) sortWithExperienceDown(employee); break;
+		case(4): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
+		}
+	} while (choise != 4);
 }
 
 // выбор сортировки в порядке убывания или в порядке возрастания
@@ -147,22 +151,28 @@ int typeOFSorting()
 void chooseTypeOfSearch(std::vector<Employee>& employee)
 {
 	int choise;
-
-	std::cout << "1. Поиск по фамилии.\n";
-	std::cout << "2. Поиск по должности.\n";
-	std::cout << "3. Поиск по году начала работы.\n\n";
-
-	std::cout << "Выберите критерий, по которому будет осуществлён поиск: ";
-	std::cin >> choise;
-	system("cls");
-
-	switch (choise)
+	do
 	{
-	case(1): searchForSurName(employee); std::cout << std::endl; break;
-	case(2): searchForPost(employee); std::cout << std::endl; break;
-	case(3): searchForStartDate(employee); std::cout << std::endl; break;
-	default: break;
-	}
+		std::cout << "------------------------------------------------ПОИСК-------------------------------------------------------------------";
+		std::cout << "1. Поиск по фамилии.\n";
+		std::cout << "2. Поиск по должности.\n";
+		std::cout << "3. Поиск по году начала работы.\n";
+		std::cout << "4. Вернуться назад.\n\n";
+
+		choise = checkInput();
+		system("cls");
+
+		switch (choise)
+		{
+		case(1): searchForSurName(employee); std::cout << std::endl; break;
+		case(2): searchForPost(employee); std::cout << std::endl; break;
+		case(3): searchForStartDate(employee); std::cout << std::endl; break;
+		case(4): break;
+		default: std::cout << termcolor::red << "Введите цифру из списка!" << termcolor::reset; Sleep(2000); system("cls");
+		}
+	} while (choise != 4);
+
+	
 }
 
 // редим редактирования
@@ -399,7 +409,8 @@ void EngEditingMode(std::vector<Employee>& employee)
 		system("cls");
 		switch (choise)
 		{
-		case(CHECKING): std::cout << "Here is a list of all current employees:\n\n"; printAllEmployee(employee); break;
+		case(CHECKING): std::cout << "Here is a list of all current employees:\n\n"; printAllEmployee(employee); std::cout << "Press any key to continue...";
+			_getch(); system("cls"); break;
 		case(ADDING):   engAddNewEmployee(employee);   break;
 		case(EDITING):  engEditEmployee(employee);     break;
 		case(DELETING): engDeleteEmployee(employee);   break;
